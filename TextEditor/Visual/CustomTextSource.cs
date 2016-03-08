@@ -7,10 +7,12 @@ namespace TextEditor.Visual
     class CustomTextSource : TextSource
     {
         private List<CustomTextRun> Runs;
+        private TextEditorConfiguration configuration;
 
-        public CustomTextSource(List<CustomTextRun> Runs)
+        public CustomTextSource(List<CustomTextRun> Runs, TextEditorConfiguration configuration)
         {
             this.Runs = Runs;
+            this.configuration = configuration;
         }
 
         public override TextSpan<CultureSpecificCharacterBufferRange> GetPrecedingText(int textSourceCharacterIndexLimit)
@@ -35,7 +37,7 @@ namespace TextEditor.Visual
                         return new TextEndOfParagraph(1);
                     }
 
-                    var props = new CustomTextRunProperties();
+                    var props = new CustomTextRunProperties(configuration);
 
                     return new TextCharacters(
                         currentRun.Text,

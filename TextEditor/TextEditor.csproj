@@ -62,6 +62,8 @@
     <Compile Include="Visual\CustomTextRun.cs" />
     <Compile Include="Visual\CustomTextRunProperties.cs" />
     <Compile Include="Visual\CustomTextSource.cs" />
+    <Compile Include="Visual\TextEditorConfiguration.cs" />
+    <Compile Include="Visual\TextEditorRenderer.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

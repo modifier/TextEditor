@@ -7,11 +7,18 @@ namespace TextEditor.Visual
 {
     class CustomTextRunProperties : TextRunProperties
     {
+        private TextEditorConfiguration configuration;
+
+        public CustomTextRunProperties(TextEditorConfiguration configuration)
+        {
+            this.configuration = configuration;
+        }
+
         public override Brush BackgroundBrush
         {
             get
             {
-                return null;
+                return configuration.BackgroundColor;
             }
         }
 
@@ -27,7 +34,7 @@ namespace TextEditor.Visual
         {
             get
             {
-                return 14;
+                return configuration.FontSize;
             }
         }
 
@@ -35,7 +42,7 @@ namespace TextEditor.Visual
         {
             get
             {
-                return 14;
+                return configuration.FontSize;
             }
         }
 
@@ -43,7 +50,7 @@ namespace TextEditor.Visual
         {
             get
             {
-                return Brushes.Black;
+                return configuration.ForegroundColor;
             }
         }
 
@@ -67,7 +74,7 @@ namespace TextEditor.Visual
         {
             get
             {
-                return new Typeface("Lucida Console");
+                return new Typeface(configuration.FontFamily);
             }
         }
     }
