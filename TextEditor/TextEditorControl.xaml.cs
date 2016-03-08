@@ -38,7 +38,6 @@ namespace TextEditor
 
         private void DisplayText()
         {
-            var testDest = new DrawingGroup();
             var dc = mainBrush.Open();
 
             var textSource = new CustomTextSource(transformText(text));
@@ -49,24 +48,31 @@ namespace TextEditor
                 true,
                 false,
                 new CustomTextRunProperties(),
-                TextWrapping.Wrap,
-                30,
+                TextWrapping.NoWrap,
+                22,
                 0
             );
             int textStorePosition = 0;
             Point linePosition = new Point(0, 0);
 
+            double[] rectDimensions = { 0, 0 };
+
             while (textStorePosition < textSource.Length)
             {
-                using (var line = formatter.FormatLine(textSource, textStorePosition, 96*6, properties, null))
+                using (var line = formatter.FormatLine(textSource, textStorePosition, 5000, properties, null))
                 {
                     line.Draw(dc, linePosition, InvertAxes.None);
                     textStorePosition += line.Length;
                     linePosition.Y += line.Height;
+
+                    rectDimensions[0] = line.Width > rectDimensions[0] ? line.Width : rectDimensions[0];
+                    rectDimensions[1] += line.Height;
                 }
             }
 
             dc.Close();
+            Rectus.Width = rectDimensions[0];
+            Rectus.Height = rectDimensions[1];
         }
 
         private List<CustomTextRun> transformText(string[] text)

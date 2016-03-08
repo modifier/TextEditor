@@ -27,7 +27,7 @@ namespace TextEditor.Visual
         {
             get
             {
-                return 22;
+                return 14;
             }
         }
 
@@ -35,7 +35,7 @@ namespace TextEditor.Visual
         {
             get
             {
-                return 22;
+                return 14;
             }
         }
 
