@@ -27,6 +27,18 @@ namespace TextEditor.Controller
             {
                 text.addLetter(key);
             }
+            else if (isArrowKey(key))
+            {
+
+            }
+            else if (key == Key.Back)
+            {
+                text.removePreviousLetter();
+            }
+            else if (key == Key.Return)
+            {
+                text.returnCaret();
+            }
 
             renderer.DisplayText(transformText(text.text));
         }
@@ -76,6 +88,11 @@ namespace TextEditor.Controller
         {
             return (key >= Key.A && key <= Key.Z) || (key >= Key.D0 && key <= Key.D9)
                 || (key >= Key.NumPad0 && key <= Key.NumPad9) || textKeys.Contains(key);
+        }
+
+        private bool isArrowKey(Key key)
+        {
+            return key == Key.Up || key == Key.Down || key == Key.Right || key == Key.Left;
         }
     }
 }
