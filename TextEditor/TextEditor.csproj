@@ -55,6 +55,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controller\TextController.cs" />
+    <Compile Include="Logic\KeyTranslator.cs" />
+    <Compile Include="Logic\Text.cs" />
     <Compile Include="TextEditorControl.xaml.cs">
       <DependentUpon>TextEditorControl.xaml</DependentUpon>
     </Compile>

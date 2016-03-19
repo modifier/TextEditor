@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
+using TextEditor.Controller;
 using TextEditor.Visual;
 
 namespace TextEditor
@@ -11,6 +13,8 @@ namespace TextEditor
     public partial class TextEditorControl : UserControl
     {
         private TextEditorRenderer renderer;
+
+        private TextController controller;
 
         private string[] text = {
         "The quick brown fox jumps over the lazy dog",
@@ -23,23 +27,21 @@ namespace TextEditor
 
             renderer = new TextEditorRenderer(mainBrush, Rectus);
             renderer.SetConfiguration(new TextEditorConfiguration { FontFamily = "Lucida Console", FontSize = 14, TextHeight = 14, ForegroundColor = Brushes.Black });
-            renderer.DisplayText(transformText(text));
+
+            controller = new TextController(renderer);
         }
 
-        // http://stackoverflow.com/questions/2750576/subscript-superscript-in-formattedtext-class
-        // https://msdn.microsoft.com/ru-ru/library/ms754036%28v=vs.100%29.aspx
-
-        private List<CustomTextRun> transformText(string[] text)
+        private void UserControl_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            List<CustomTextRun> Runs = new List<CustomTextRun>();
-
-            foreach (var line in text)
+            if (!this.IsFocused)
             {
-                Runs.Add(new CustomTextRun { Text = line });
-                Runs.Add(new CustomTextRun { IsEndParagraph = true });
+                Focus();
             }
+        }
 
-            return Runs;
+        private void UserControl_KeyDown(object sender, KeyEventArgs e)
+        {
+            controller.keyPress(e.Key);
         }
     }
 }

@@ -24,5 +24,10 @@ namespace TextEditor
         {
             InitializeComponent();
         }
+
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            textEditor.Focus();
+        }
     }
 }
