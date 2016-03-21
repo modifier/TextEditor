@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using TextEditor.Logic;
+using TextEditor.Logic.Commands;
 using TextEditor.Visual;
 
 namespace TextEditor.Controller
@@ -13,19 +14,25 @@ namespace TextEditor.Controller
     {
         private Text text;
 
+        private TextCursor cursor = new TextCursor();
+
         private TextEditorRenderer renderer;
+
+        private AbstractCommand executed;
 
         public TextController(TextEditorRenderer renderer)
         {
             this.renderer = renderer;
-            text = new Text();
+            text = new Text(cursor);
         }
 
         public void keyPress(Key key)
         {
+            AbstractCommand command = null;
+
             if (isTextKey(key))
             {
-                text.addLetter(key);
+                command = new AddCharCommand(key);
             }
             else if (isArrowKey(key))
             {
@@ -33,14 +40,19 @@ namespace TextEditor.Controller
             }
             else if (key == Key.Back)
             {
-                text.removePreviousLetter();
+                command = new RemoveCharCommand();
             }
             else if (key == Key.Return)
             {
-                text.returnCaret();
+                //text.returnCaret();
             }
 
-            renderer.DisplayText(transformText(text.text));
+            if (command != null)
+            {
+                command.SetParameters(text, cursor);
+                executeCommand(command);
+                renderer.DisplayText(transformText(text.text));
+            }
         }
 
         // http://stackoverflow.com/questions/2750576/subscript-superscript-in-formattedtext-class
@@ -93,6 +105,24 @@ namespace TextEditor.Controller
         private bool isArrowKey(Key key)
         {
             return key == Key.Up || key == Key.Down || key == Key.Right || key == Key.Left;
+        }
+
+        private void executeCommand(AbstractCommand command)
+        {
+            if (command == null || !command.isExecutable())
+            {
+                return;
+            }
+
+            command.execute();
+
+            if (executed != null)
+            {
+                executed.nextLink = command;
+                command.prevLink = executed;
+            }
+
+            executed = command;
         }
     }
 }

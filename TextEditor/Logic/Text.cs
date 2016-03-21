@@ -1,35 +1,29 @@
 ﻿using System.Collections.Generic;
-using System.Windows.Input;
 
 namespace TextEditor.Logic
 {
     class Text
     {
-        private int cursorX = 0;
-
-        private int cursorY = 0;
-
         public List<string> text
         {
             get;
+
             private set;
         }
 
-        public Text()
+        private TextCursor cursor;
+
+        public Text(TextCursor cursor)
         {
             text = new List<string>() { "" };
+            this.cursor = cursor;
         }
 
-        public void addLetter(Key key)
-        {
-            addChar(KeyTranslator.GetCharFromKey(key).ToString());
-        }
-
-        public void removePreviousLetter()
+        public string removePreviousLetter(int cursorX, int cursorY)
         {
             if (cursorX == 0 && cursorY == 0)
             {
-                return;
+                return null;
             }
 
             string currentLine = text[cursorY];
@@ -37,22 +31,30 @@ namespace TextEditor.Logic
             if (cursorX == 0)
             {
                 string previousLine = text[cursorY - 1];
+                string cutLetter = text[cursorY];
                 text.RemoveAt(cursorY);
                 text[cursorY - 1] = previousLine + currentLine;
 
-                cursorY--;
-                cursorX = previousLine.Length;
+                cursor.y = cursorY - 1;
+                cursor.x = previousLine.Length;
+
+                return cutLetter;
             }
             else
             {
                 text[cursorY] = currentLine.Remove(cursorX - 1);
 
-                cursorX--;
+                cursor.y = cursorY;
+                cursor.x = cursorX - 1;
+
+                return "\n";
             }
         }
 
-        public void removeNextLetter()
+        public void removeNextLetter(int cursorX, int cursorY)
         {
+            // todo: TBD
+
             string currentLine = text[cursorY];
 
             if (cursorY == text.Count && cursorX == currentLine.Length)
@@ -72,20 +74,19 @@ namespace TextEditor.Logic
             }
         }
 
-        public void returnCaret()
+        public void returnCaret(int cursorX, int cursorY)
         {
-            text.Add("");
-            cursorX = 0;
-            cursorY++;
+            // todo: TBD
         }
 
-        private void addChar(string ch)
+        public void addChar(string ch, int cursorX, int cursorY)
         {
             string textLine = text[cursorY];
 
             text[cursorY] = textLine.Insert(cursorX, ch);
 
-            cursorX++;
+            cursor.x = cursorX + 1;
+            cursor.y = cursorY;
         }
     }
 }
