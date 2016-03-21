@@ -20,6 +20,8 @@ namespace TextEditor.Controller
 
         private AbstractCommand executed;
 
+        private AbstractCommand undoed;
+
         public TextController(TextEditorRenderer renderer)
         {
             this.renderer = renderer;
@@ -32,7 +34,12 @@ namespace TextEditor.Controller
 
             if (CtrlPressed() && key == Key.Z)
             {
-                undoPrevious();
+                undo();
+
+                return;
+            } else if (CtrlPressed() && key == Key.Y)
+            {
+                redo();
 
                 return;
             }
@@ -150,9 +157,10 @@ namespace TextEditor.Controller
             }
 
             executed = command;
+            undoed = null;
         }
 
-        private void undoPrevious()
+        private void undo()
         {
             if (executed == null)
             {
@@ -160,7 +168,22 @@ namespace TextEditor.Controller
             }
 
             AbstractCommand previous = executed.undo();
-            executed = previous;
+            executed = previous.prevLink;
+            undoed = previous;
+
+            renderer.DisplayText(transformText(text.text));
+        }
+
+        private void redo()
+        {
+            if (undoed == null)
+            {
+                return;
+            }
+
+            AbstractCommand next = undoed.execute();
+            executed = next;
+            undoed = next.nextLink;
 
             renderer.DisplayText(transformText(text.text));
         }

@@ -30,7 +30,7 @@ namespace TextEditor.Logic.Commands
                 return nextLink.execute();
             }
 
-            return nextLink;
+            return this;
         }
 
         public AbstractCommand undo()
@@ -42,7 +42,7 @@ namespace TextEditor.Logic.Commands
                 return prevLink.undo();
             }
 
-            return prevLink;
+            return this;
         }
 
         public abstract bool isExecutable();
