@@ -30,6 +30,18 @@ namespace TextEditor.Controller
         {
             AbstractCommand command = null;
 
+            if (CtrlPressed() && key == Key.Z)
+            {
+                undoPrevious();
+
+                return;
+            }
+
+            if (ModifierKeyPressed())
+            {
+                return;
+            }
+
             if (isTextKey(key))
             {
                 command = new AddCharCommand(key);
@@ -107,6 +119,21 @@ namespace TextEditor.Controller
             return key == Key.Up || key == Key.Down || key == Key.Right || key == Key.Left;
         }
 
+        private bool ModifierKeyPressed()
+        {
+            return CtrlPressed() || AltPressed();
+        }
+
+        private bool CtrlPressed()
+        {
+            return Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
+        }
+
+        private bool AltPressed()
+        {
+            return Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt);
+        }
+
         private void executeCommand(AbstractCommand command)
         {
             if (command == null || !command.isExecutable())
@@ -123,6 +150,19 @@ namespace TextEditor.Controller
             }
 
             executed = command;
+        }
+
+        private void undoPrevious()
+        {
+            if (executed == null)
+            {
+                return;
+            }
+
+            AbstractCommand previous = executed.undo();
+            executed = previous;
+
+            renderer.DisplayText(transformText(text.text));
         }
     }
 }

@@ -31,23 +31,23 @@ namespace TextEditor.Logic
             if (cursorX == 0)
             {
                 string previousLine = text[cursorY - 1];
-                string cutLetter = text[cursorY];
                 text.RemoveAt(cursorY);
                 text[cursorY - 1] = previousLine + currentLine;
 
                 cursor.y = cursorY - 1;
                 cursor.x = previousLine.Length;
 
-                return cutLetter;
+                return "\n";
             }
             else
             {
+                string cutLetter = currentLine[cursorX - 1].ToString();
                 text[cursorY] = currentLine.Remove(cursorX - 1);
 
                 cursor.y = cursorY;
                 cursor.x = cursorX - 1;
 
-                return "\n";
+                return cutLetter;
             }
         }
 
