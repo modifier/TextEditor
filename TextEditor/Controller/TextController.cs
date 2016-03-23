@@ -63,7 +63,7 @@ namespace TextEditor.Controller
             }
             else if (key == Key.Return)
             {
-                //text.returnCaret();
+                command = new ReturnCaretCommand();
             }
 
             if (command != null)

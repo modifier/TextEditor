@@ -59,6 +59,7 @@
     <Compile Include="Logic\Commands\AbstractCommand.cs" />
     <Compile Include="Logic\Commands\AddCharCommand.cs" />
     <Compile Include="Logic\Commands\RemoveCharCommand.cs" />
+    <Compile Include="Logic\Commands\ReturnCaretCommand.cs" />
     <Compile Include="Logic\TextCursor.cs" />
     <Compile Include="Logic\KeyTranslator.cs" />
     <Compile Include="Logic\Text.cs" />

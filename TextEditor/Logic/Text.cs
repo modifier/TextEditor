@@ -76,7 +76,16 @@ namespace TextEditor.Logic
 
         public void returnCaret(int cursorX, int cursorY)
         {
-            // todo: TBD
+            string currentLine = text[cursorY];
+
+            string lineBefore = currentLine.Substring(0, cursorX);
+            string lineAfter = currentLine.Substring(cursorX);
+
+            text[cursorY] = lineBefore;
+            text.Insert(cursorY + 1, lineAfter);
+
+            cursor.x = 0;
+            cursor.y = cursorY + 1;
         }
 
         public void addChar(string ch, int cursorX, int cursorY)
