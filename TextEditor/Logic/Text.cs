@@ -42,7 +42,7 @@ namespace TextEditor.Logic
             else
             {
                 string cutLetter = currentLine[cursorX - 1].ToString();
-                text[cursorY] = currentLine.Remove(cursorX - 1);
+                text[cursorY] = currentLine.Remove(cursorX - 1, 1);
 
                 cursor.y = cursorY;
                 cursor.x = cursorX - 1;

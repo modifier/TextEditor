@@ -37,7 +37,8 @@ namespace TextEditor.Controller
                 undo();
 
                 return;
-            } else if (CtrlPressed() && key == Key.Y)
+            }
+            else if (CtrlPressed() && key == Key.Y)
             {
                 redo();
 
@@ -55,7 +56,7 @@ namespace TextEditor.Controller
             }
             else if (isArrowKey(key))
             {
-
+                moveCaret(key);
             }
             else if (key == Key.Back)
             {
@@ -186,6 +187,54 @@ namespace TextEditor.Controller
             undoed = next.nextLink;
 
             renderer.DisplayText(transformText(text.text));
+        }
+
+        private void moveCaret(Key key)
+        {
+            if (key == Key.Up)
+            {
+                cursor.y = Math.Max(0, cursor.y - 1);
+            }
+            else if (key == Key.Down)
+            {
+                cursor.y = Math.Min(text.text.Count, cursor.y + 1);
+            }
+            else if (key == Key.Left)
+            {
+                if (cursor.x == 0 && cursor.y == 0)
+                {
+                    return;
+                }
+
+                if (cursor.x == 0)
+                {
+                    cursor.y--;
+                    cursor.x = text.text[cursor.y].Length;
+                }
+                else
+                {
+                    cursor.x--;
+                }
+            }
+            else if (key == Key.Right)
+            {
+                int lineLength = text.text[cursor.y].Length;
+
+                if (cursor.x == lineLength && cursor.y == text.text.Count)
+                {
+                    return;
+                }
+
+                if (cursor.x == lineLength)
+                {
+                    cursor.y++;
+                    cursor.x = 0;
+                }
+                else
+                {
+                    cursor.x++;
+                }
+            }
         }
     }
 }
