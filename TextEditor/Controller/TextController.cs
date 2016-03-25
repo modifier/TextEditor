@@ -32,15 +32,26 @@ namespace TextEditor.Controller
         {
             AbstractCommand command = null;
 
-            if (CtrlPressed() && key == Key.Z)
+            if (CtrlPressed())
             {
-                undo();
-
-                return;
-            }
-            else if (CtrlPressed() && key == Key.Y)
-            {
-                redo();
+                if (key == Key.Z)
+                {
+                    undo();
+                }
+                else if (key == Key.Y)
+                {
+                    redo();
+                }
+                else if (key == Key.Home)
+                {
+                    cursor.x = 0;
+                    cursor.y = 0;
+                }
+                else if (key == Key.End)
+                {
+                    cursor.y = text.text.Count - 1;
+                    cursor.x = text.text[cursor.y].Length;
+                }
 
                 return;
             }
@@ -65,6 +76,14 @@ namespace TextEditor.Controller
             else if (key == Key.Return)
             {
                 command = new ReturnCaretCommand();
+            }
+            else if (key == Key.Home)
+            {
+                cursor.x = 0;
+            }
+            else if (key == Key.End)
+            {
+                cursor.x = text.text[cursor.y].Length;
             }
 
             if (command != null)
