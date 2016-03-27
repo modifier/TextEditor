@@ -20,7 +20,7 @@ namespace TextEditor.Logic.Commands
 
         protected override bool stacksWith(AbstractCommand command)
         {
-            return command is AddCharCommand || command is ReturnCaretCommand;
+            return command is ReturnCaretCommand;
         }
 
         protected override void undoAtomic()

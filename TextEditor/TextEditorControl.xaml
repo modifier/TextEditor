@@ -10,7 +10,7 @@
              MouseLeftButtonDown="UserControl_MouseLeftButtonDown">
     <Grid VerticalAlignment="Top" HorizontalAlignment="Left">
         <Border Grid.Column="1" Grid.Row="1" Margin="5">
-            <Canvas>
+            <Canvas Name="Surface">
                 <Rectangle Name="Rectus">
                     <Rectangle.Fill>
                         <DrawingBrush Stretch="None" AlignmentY="Top" AlignmentX="Left">

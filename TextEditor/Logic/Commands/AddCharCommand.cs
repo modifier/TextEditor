@@ -28,7 +28,7 @@ namespace TextEditor.Logic.Commands
 
         protected override bool stacksWith(AbstractCommand command)
         {
-            return command is AddCharCommand || command is ReturnCaretCommand;
+            return command is AddCharCommand;
         }
 
         public override bool isExecutable()

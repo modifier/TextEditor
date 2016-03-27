@@ -3,6 +3,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Media.TextFormatting;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace TextEditor.Visual
 {
@@ -11,11 +12,15 @@ namespace TextEditor.Visual
         private DrawingGroup dg;
         private Rectangle Rectus;
         private TextEditorConfiguration configuration;
+        private Line cursor = null;
+        private Canvas surface;
+        private List<TextLine> cachedLines = new List<TextLine>();
 
-        public TextEditorRenderer(DrawingGroup dg, Rectangle rect)
+        public TextEditorRenderer(DrawingGroup dg, Rectangle rect, Canvas surface)
         {
             this.dg = dg;
             this.Rectus = rect;
+            this.surface = surface;
         }
 
         public void SetConfiguration(TextEditorConfiguration configuration)
@@ -25,6 +30,8 @@ namespace TextEditor.Visual
 
         public void DisplayText(List<CustomTextRun> runs)
         {
+            cachedLines.Clear();
+
             var dc = dg.Open();
 
             var textSource = new CustomTextSource(runs, configuration);
@@ -46,20 +53,43 @@ namespace TextEditor.Visual
 
             while (textStorePosition < textSource.Length)
             {
-                using (var line = formatter.FormatLine(textSource, textStorePosition, 5000, properties, null))
-                {
-                    line.Draw(dc, linePosition, InvertAxes.None);
-                    textStorePosition += line.Length;
-                    linePosition.Y += line.Height;
+                TextLine line = formatter.FormatLine(textSource, textStorePosition, 5000, properties, null);
+                cachedLines.Add(line);
 
-                    rectDimensions[0] = line.Width > rectDimensions[0] ? line.Width : rectDimensions[0];
-                    rectDimensions[1] += line.Height;
-                }
+                line.Draw(dc, linePosition, InvertAxes.None);
+                textStorePosition += line.Length;
+                linePosition.Y += line.Height;
+
+                rectDimensions[0] = line.Width > rectDimensions[0] ? line.Width : rectDimensions[0];
+                rectDimensions[1] += line.Height;
             }
 
             dc.Close();
             Rectus.Width = rectDimensions[0];
             Rectus.Height = rectDimensions[1];
+        }
+
+        public void PlaceCursor(int hitPosition, int cursorY)
+        {
+            if (cursor == null)
+            {
+                cursor = new Line();
+                cursor.Stroke = Brushes.Black;
+                cursor.StrokeThickness = 1;
+                surface.Children.Add(cursor);
+            }
+
+            double y1 = 0;
+            for (int i = 0; i < cursorY; i++)
+            {
+                y1 += cachedLines[i].Height;
+            }
+            
+            var position = cachedLines[cursorY].GetDistanceFromCharacterHit(new CharacterHit(hitPosition, 0));
+
+            cursor.X1 = cursor.X2 = position;
+            cursor.Y1 = y1;
+            cursor.Y2 = y1 + cachedLines[cursorY].Height;
         }
     }
 }

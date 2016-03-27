@@ -53,6 +53,8 @@ namespace TextEditor.Controller
                     cursor.x = text.text[cursor.y].Length;
                 }
 
+                displayCursor();
+
                 return;
             }
 
@@ -77,20 +79,13 @@ namespace TextEditor.Controller
             {
                 command = new ReturnCaretCommand();
             }
-            else if (key == Key.Home)
-            {
-                cursor.x = 0;
-            }
-            else if (key == Key.End)
-            {
-                cursor.x = text.text[cursor.y].Length;
-            }
 
             if (command != null)
             {
                 command.SetParameters(text, cursor);
                 executeCommand(command);
                 renderer.DisplayText(transformText(text.text));
+                displayCursor();
             }
         }
 
@@ -143,7 +138,7 @@ namespace TextEditor.Controller
 
         private bool isArrowKey(Key key)
         {
-            return key == Key.Up || key == Key.Down || key == Key.Right || key == Key.Left;
+            return key == Key.Up || key == Key.Down || key == Key.Right || key == Key.Left || key == Key.Home || key == Key.End;
         }
 
         private bool ModifierKeyPressed()
@@ -213,10 +208,20 @@ namespace TextEditor.Controller
             if (key == Key.Up)
             {
                 cursor.y = Math.Max(0, cursor.y - 1);
+                cursor.x = Math.Min(text.text[cursor.y].Length, cursor.x);
             }
             else if (key == Key.Down)
             {
-                cursor.y = Math.Min(text.text.Count, cursor.y + 1);
+                cursor.y = Math.Min(text.text.Count - 1, cursor.y + 1);
+                cursor.x = Math.Min(text.text[cursor.y].Length, cursor.x);
+            }
+            else if (key == Key.Home)
+            {
+                cursor.x = 0;
+            }
+            else if (key == Key.End)
+            {
+                cursor.x = text.text[cursor.y].Length;
             }
             else if (key == Key.Left)
             {
@@ -239,7 +244,7 @@ namespace TextEditor.Controller
             {
                 int lineLength = text.text[cursor.y].Length;
 
-                if (cursor.x == lineLength && cursor.y == text.text.Count)
+                if (cursor.x == lineLength && cursor.y == text.text.Count - 1)
                 {
                     return;
                 }
@@ -254,6 +259,19 @@ namespace TextEditor.Controller
                     cursor.x++;
                 }
             }
+
+            displayCursor();
+        }
+
+        private void displayCursor()
+        {
+            int hitPosition = 0;
+            for (int i = 0; i < cursor.y; i++)
+            {
+                hitPosition += text.text[i].Length + 1;
+            }
+
+            renderer.PlaceCursor(hitPosition + cursor.x, cursor.y);
         }
     }
 }

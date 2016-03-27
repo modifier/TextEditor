@@ -16,16 +16,11 @@ namespace TextEditor
 
         private TextController controller;
 
-        private string[] text = {
-        "The quick brown fox jumps over the lazy dog",
-        "Съешь ещё этих мягких францзских булок, да выпей же чаю"
-        };
-
         public TextEditorControl()
         {
             InitializeComponent();
 
-            renderer = new TextEditorRenderer(mainBrush, Rectus);
+            renderer = new TextEditorRenderer(mainBrush, Rectus, Surface);
             renderer.SetConfiguration(new TextEditorConfiguration { FontFamily = "Lucida Console", FontSize = 14, TextHeight = 14, ForegroundColor = Brushes.Black });
 
             controller = new TextController(renderer);
