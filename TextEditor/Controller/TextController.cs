@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using TextEditor.Logic;
 using TextEditor.Logic.Commands;
@@ -237,6 +238,14 @@ namespace TextEditor.Controller
         private void displayCursor()
         {
             renderer.PlaceCursor(cursor.getHitPosition(), cursor.y);
+        }
+
+        public void setCursorFromPoint(Point point)
+        {
+            int currentHit = renderer.getCurrentHit(point);
+            
+            cursor.setHitPosition(currentHit);
+            displayCursor();
         }
     }
 }

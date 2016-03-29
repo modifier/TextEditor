@@ -123,12 +123,16 @@ namespace TextEditor.Logic
             {
                 if (hitPosition < text.text[i].Length)
                 {
+                    y = i;
                     x = hitPosition;
+
+                    return;
                 }
 
                 hitPosition -= text.text[i].Length + 1;
             }
 
+            endY();
             x = hitPosition;
         }
     }

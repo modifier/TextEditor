@@ -8,19 +8,15 @@
              Focusable="True"
              KeyDown="UserControl_KeyDown"
              MouseLeftButtonDown="UserControl_MouseLeftButtonDown">
-    <Grid VerticalAlignment="Top" HorizontalAlignment="Left">
-        <Border Grid.Column="1" Grid.Row="1" Margin="5">
-            <Canvas Name="Surface">
-                <Rectangle Name="Rectus">
-                    <Rectangle.Fill>
-                        <DrawingBrush Stretch="None" AlignmentY="Top" AlignmentX="Left">
-                            <DrawingBrush.Drawing>
-                                <DrawingGroup x:Name="mainBrush" />
-                            </DrawingBrush.Drawing>
-                        </DrawingBrush>
-                    </Rectangle.Fill>
-                </Rectangle>
-            </Canvas>
-        </Border>
-    </Grid>
+    <Canvas Name="Surface" Margin="5">
+        <Rectangle Name="Rectus">
+            <Rectangle.Fill>
+                <DrawingBrush Stretch="None" AlignmentY="Top" AlignmentX="Left">
+                    <DrawingBrush.Drawing>
+                        <DrawingGroup x:Name="mainBrush" />
+                    </DrawingBrush.Drawing>
+                </DrawingBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+    </Canvas>
 </UserControl>

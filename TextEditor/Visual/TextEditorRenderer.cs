@@ -91,5 +91,27 @@ namespace TextEditor.Visual
             cursor.Y1 = y1;
             cursor.Y2 = y1 + cachedLines[cursorY].Height;
         }
+
+        public int getCurrentHit(Point point)
+        {
+            var currentHit = cachedLines[getYFromHeight(point.Y)].GetCharacterHitFromDistance(point.X);
+
+            return currentHit.FirstCharacterIndex;
+        }
+
+        private int getYFromHeight(double height)
+        {
+            for (int i = 0; i < cachedLines.Count; i++)
+            {
+                if (height < cachedLines[i].Height)
+                {
+                    return i;
+                }
+
+                height -= cachedLines[i].Height;
+            }
+
+            return cachedLines.Count - 1;
+        }
     }
 }

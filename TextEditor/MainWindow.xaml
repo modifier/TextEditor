@@ -8,6 +8,6 @@
         Title="MainWindow" Height="350" Width="525"
         MouseDown="Window_MouseDown">
     <Grid>
-        <local:TextEditorControl Focusable="True" x:Name="textEditor"></local:TextEditorControl>
+        <local:TextEditorControl Focusable="True" x:Name="textEditor" Grid.Column="0" Grid.Row="0"></local:TextEditorControl>
     </Grid>
 </Window>

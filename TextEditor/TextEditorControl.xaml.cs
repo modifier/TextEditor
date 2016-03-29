@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -28,10 +29,13 @@ namespace TextEditor
 
         private void UserControl_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (!this.IsFocused)
+            if (!IsFocused)
             {
                 Focus();
             }
+
+            var position = e.GetPosition((IInputElement)sender);
+            controller.setCursorFromPoint(position);
         }
 
         private void UserControl_KeyDown(object sender, KeyEventArgs e)
