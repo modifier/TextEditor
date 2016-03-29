@@ -8,18 +8,128 @@ namespace TextEditor.Logic
 {
     class TextCursor
     {
-        public int x = 0;
+        private int innerX = 0;
 
-        public int y = 0;
+        private int innerY = 0;
 
-        public TextCursor clone()
+        private Text text = null;
+
+        public void setText(Text text)
         {
-            TextCursor c = new TextCursor();
+            this.text = text;
+        }
 
-            c.x = x;
-            c.y = y;
+        public int Clamp(int val, int minVal, int maxVal)
+        {
+            return val > maxVal ? maxVal : val < minVal ? minVal : val;
+        }
 
-            return c;
+        public int x
+        {
+            get
+            {
+                return innerX;
+            }
+            set
+            {
+                innerX = Clamp(value, 0, text.text[y].Length);
+            }
+        }
+
+        public int y
+        {
+            get
+            {
+                return innerY;
+            }
+            set
+            {
+                innerY = Clamp(value, 0, text.text.Count - 1);
+                innerX = Clamp(innerX, 0, text.text[y].Length);
+            }
+        }
+
+        public void endX()
+        {
+            innerX = text.text[y].Length;
+        }
+
+        public void endY()
+        {
+            innerY = text.text.Count - 1;
+        }
+
+        public void incX()
+        {
+            int lineLength = text.text[y].Length;
+
+            if (x == lineLength && y == text.text.Count - 1)
+            {
+                return;
+            }
+
+            if (x == lineLength)
+            {
+                y++;
+                x = 0;
+            }
+            else
+            {
+                x++;
+            }
+        }
+
+        public void decX()
+        {
+            if (x == 0 && y == 0)
+            {
+                return;
+            }
+
+            if (x == 0)
+            {
+                y--;
+            }
+            else
+            {
+                x--;
+            }
+        }
+
+        public void incY()
+        {
+            y++;
+        }
+
+        public void decY()
+        {
+            y--;
+        }
+
+        public int getHitPosition()
+        {
+            int hitPosition = 0;
+            for (int i = 0; i < y; i++)
+            {
+                hitPosition += text.text[i].Length + 1;
+            }
+
+            return hitPosition + x;
+        }
+
+        public void setHitPosition(int hitPosition)
+        {
+            for (int i = 0; i <= y; i++)
+            {
+                if (hitPosition < text.text[i].Length)
+                {
+                    x = hitPosition;
+                }
+
+                hitPosition -= text.text[i].Length + 1;
+            }
+
+            x = hitPosition;
         }
     }
 }

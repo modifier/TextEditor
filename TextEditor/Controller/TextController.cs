@@ -26,6 +26,7 @@ namespace TextEditor.Controller
         {
             this.renderer = renderer;
             text = new Text(cursor);
+            cursor.setText(text);
         }
 
         public void keyPress(Key key)
@@ -49,8 +50,8 @@ namespace TextEditor.Controller
                 }
                 else if (key == Key.End)
                 {
-                    cursor.y = text.text.Count - 1;
-                    cursor.x = text.text[cursor.y].Length;
+                    cursor.endY();
+                    cursor.endX();
                 }
 
                 displayCursor();
@@ -207,13 +208,11 @@ namespace TextEditor.Controller
         {
             if (key == Key.Up)
             {
-                cursor.y = Math.Max(0, cursor.y - 1);
-                cursor.x = Math.Min(text.text[cursor.y].Length, cursor.x);
+                cursor.decY();
             }
             else if (key == Key.Down)
             {
-                cursor.y = Math.Min(text.text.Count - 1, cursor.y + 1);
-                cursor.x = Math.Min(text.text[cursor.y].Length, cursor.x);
+                cursor.incY();
             }
             else if (key == Key.Home)
             {
@@ -221,43 +220,15 @@ namespace TextEditor.Controller
             }
             else if (key == Key.End)
             {
-                cursor.x = text.text[cursor.y].Length;
+                cursor.endX();
             }
             else if (key == Key.Left)
             {
-                if (cursor.x == 0 && cursor.y == 0)
-                {
-                    return;
-                }
-
-                if (cursor.x == 0)
-                {
-                    cursor.y--;
-                    cursor.x = text.text[cursor.y].Length;
-                }
-                else
-                {
-                    cursor.x--;
-                }
+                cursor.decX();
             }
             else if (key == Key.Right)
             {
-                int lineLength = text.text[cursor.y].Length;
-
-                if (cursor.x == lineLength && cursor.y == text.text.Count - 1)
-                {
-                    return;
-                }
-
-                if (cursor.x == lineLength)
-                {
-                    cursor.y++;
-                    cursor.x = 0;
-                }
-                else
-                {
-                    cursor.x++;
-                }
+                cursor.incX();
             }
 
             displayCursor();
@@ -265,13 +236,7 @@ namespace TextEditor.Controller
 
         private void displayCursor()
         {
-            int hitPosition = 0;
-            for (int i = 0; i < cursor.y; i++)
-            {
-                hitPosition += text.text[i].Length + 1;
-            }
-
-            renderer.PlaceCursor(hitPosition + cursor.x, cursor.y);
+            renderer.PlaceCursor(cursor.getHitPosition(), cursor.y);
         }
     }
 }

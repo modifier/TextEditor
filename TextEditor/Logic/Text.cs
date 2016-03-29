@@ -84,8 +84,8 @@ namespace TextEditor.Logic
             text[cursorY] = lineBefore;
             text.Insert(cursorY + 1, lineAfter);
 
-            cursor.x = 0;
             cursor.y = cursorY + 1;
+            cursor.x = 0;
         }
 
         public void addChar(string ch, int cursorX, int cursorY)
@@ -94,8 +94,8 @@ namespace TextEditor.Logic
 
             text[cursorY] = textLine.Insert(cursorX, ch);
 
-            cursor.x = cursorX + 1;
             cursor.y = cursorY;
+            cursor.x = cursorX + 1;
         }
     }
 }
