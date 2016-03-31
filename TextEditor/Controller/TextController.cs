@@ -34,6 +34,7 @@ namespace TextEditor.Controller
 
         public void keyPress(Key key)
         {
+            // todo: refactoring
             AbstractCommand command = null;
 
             if (ShiftPressed())
@@ -45,7 +46,7 @@ namespace TextEditor.Controller
                     return;
                 }
 
-                if (selection == null)
+                if (isArrowKey(key) && selection == null)
                 {
                     selection = new TextSelection(text, cursor);
                 }
@@ -103,6 +104,10 @@ namespace TextEditor.Controller
             {
                 command.SetParameters(text, cursor);
                 executeCommand(command);
+            }
+
+            if (key != Key.LeftShift && key != Key.RightShift)
+            {
                 renderer.DisplayText(transformText(text.text));
                 displayCursor();
             }
@@ -115,10 +120,76 @@ namespace TextEditor.Controller
         {
             List<CustomTextRun> Runs = new List<CustomTextRun>();
 
+            int i = 0;
+            bool selectionRun = false;
+            TextCursor leftSelectionCursor = null,
+                rightSelectionCursor = null;
+
+            if (selection != null && selection.selectionExists())
+            {
+                leftSelectionCursor = selection.getLeftCursor();
+                rightSelectionCursor = selection.getRightCursor();
+            }
+
             foreach (var line in text)
             {
-                Runs.Add(new CustomTextRun { Text = line });
+                // todo: refactoring
+
+                if (leftSelectionCursor != null && leftSelectionCursor.y == i && rightSelectionCursor.y == i)
+                {
+                    string leftPart = line.Substring(0, leftSelectionCursor.x),
+                        middlePart = line.Substring(leftSelectionCursor.x, rightSelectionCursor.x - leftSelectionCursor.x),
+                        rightPart = line.Substring(rightSelectionCursor.x);
+
+                    if (leftPart.Length != 0)
+                    {
+                        Runs.Add(new CustomTextRun { Text = leftPart });
+                    }
+
+                    Runs.Add(new CustomTextRun { Text = middlePart, IsSelection = true });
+
+                    if (rightPart.Length != 0)
+                    {
+                        Runs.Add(new CustomTextRun { Text = rightPart });
+                    }
+                }
+                else if (leftSelectionCursor != null && leftSelectionCursor.y == i)
+                {
+                    string leftPart = line.Substring(0, leftSelectionCursor.x),
+                        rightPart = line.Substring(leftSelectionCursor.x);
+
+                    if (leftPart.Length != 0)
+                    {
+                        Runs.Add(new CustomTextRun { Text = leftPart });
+                    }
+
+                    Runs.Add(new CustomTextRun { Text = rightPart, IsSelection = true });
+                    selectionRun = true;
+                }
+                else if (selectionRun && rightSelectionCursor.y == i)
+                {
+                    string leftPart = line.Substring(0, rightSelectionCursor.x),
+                        rightPart = line.Substring(rightSelectionCursor.x);
+
+                    if (leftPart.Length != 0)
+                    {
+                        Runs.Add(new CustomTextRun { Text = leftPart, IsSelection = true });
+                    }
+
+                    Runs.Add(new CustomTextRun { Text = rightPart });
+                    selectionRun = false;
+                }
+                else if (selectionRun)
+                {
+                    Runs.Add(new CustomTextRun { Text = line, IsSelection = true });
+                }
+                else
+                {
+                    Runs.Add(new CustomTextRun { Text = line });
+                }
+                
                 Runs.Add(new CustomTextRun { IsEndParagraph = true });
+                i++;
             }
 
             return Runs;

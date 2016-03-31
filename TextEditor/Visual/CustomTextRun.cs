@@ -10,6 +10,7 @@ namespace TextEditor.Visual
     {
         public string Text;
         public bool IsEndParagraph;
+        public bool IsSelection;
         public int Length { get { return IsEndParagraph ? 1 : Text.Length; } }
     }
 }

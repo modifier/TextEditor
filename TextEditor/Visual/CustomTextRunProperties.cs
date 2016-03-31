@@ -7,7 +7,7 @@ namespace TextEditor.Visual
 {
     class CustomTextRunProperties : TextRunProperties
     {
-        private TextEditorConfiguration configuration;
+        protected TextEditorConfiguration configuration;
 
         public CustomTextRunProperties(TextEditorConfiguration configuration)
         {

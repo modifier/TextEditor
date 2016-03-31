@@ -37,7 +37,17 @@ namespace TextEditor.Visual
                         return new TextEndOfParagraph(1);
                     }
 
-                    var props = new CustomTextRunProperties(configuration);
+                    TextRunProperties props;
+
+                    if (currentRun.IsSelection)
+                    {
+                        props = new SelectionTextRunProperties(configuration);
+                    }
+                    else
+                    {
+                        props = new CustomTextRunProperties(configuration);
+                    }
+
 
                     return new TextCharacters(
                         currentRun.Text,
