@@ -17,6 +17,8 @@ namespace TextEditor.Controller
 
         private TextCursor cursor = new TextCursor();
 
+        private TextSelection selection;
+
         private TextEditorRenderer renderer;
 
         private AbstractCommand executed;
@@ -33,6 +35,21 @@ namespace TextEditor.Controller
         public void keyPress(Key key)
         {
             AbstractCommand command = null;
+
+            if (ShiftPressed())
+            {
+                if (!isArrowKey(key) && key != Key.LeftShift && key != Key.RightShift)
+                {
+                    selection = null;
+
+                    return;
+                }
+
+                if (selection == null)
+                {
+                    selection = new TextSelection(text, cursor);
+                }
+            }
 
             if (CtrlPressed())
             {
@@ -156,6 +173,11 @@ namespace TextEditor.Controller
         private bool AltPressed()
         {
             return Keyboard.IsKeyDown(Key.LeftAlt) || Keyboard.IsKeyDown(Key.RightAlt);
+        }
+
+        private bool ShiftPressed()
+        {
+            return Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift);
         }
 
         private void executeCommand(AbstractCommand command)

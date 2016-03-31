@@ -63,6 +63,7 @@
     <Compile Include="Logic\TextCursor.cs" />
     <Compile Include="Logic\KeyTranslator.cs" />
     <Compile Include="Logic\Text.cs" />
+    <Compile Include="Logic\TextSelection.cs" />
     <Compile Include="TextEditorControl.xaml.cs">
       <DependentUpon>TextEditorControl.xaml</DependentUpon>
     </Compile>
