@@ -37,19 +37,41 @@ namespace TextEditor.Controller
             // todo: refactoring
             AbstractCommand command = null;
 
-            if (ShiftPressed())
+            if (ShiftPressed() && isArrowKey(key) && selection == null)
             {
-                if (!isArrowKey(key) && key != Key.LeftShift && key != Key.RightShift)
-                {
-                    selection = null;
+                selection = new TextSelection(text, cursor);
+            }
 
-                    return;
+            if (isArrowKey(key))
+            {
+                if (CtrlPressed() && key == Key.Home)
+                {
+                    cursor.x = 0;
+                    cursor.y = 0;
+                }
+                else if (CtrlPressed() && key == Key.End)
+                {
+                    cursor.endY();
+                    cursor.endX();
+                }
+                else
+                {
+                    moveCaret(key);
                 }
 
-                if (isArrowKey(key) && selection == null)
+                if (selection != null)
                 {
-                    selection = new TextSelection(text, cursor);
+                    if (!ShiftPressed())
+                    {
+                        selection = null;
+                    }
+
+                    renderer.DisplayText(transformText(text.text));
                 }
+
+                displayCursor();
+
+                return;
             }
 
             if (CtrlPressed())
@@ -62,18 +84,6 @@ namespace TextEditor.Controller
                 {
                     redo();
                 }
-                else if (key == Key.Home)
-                {
-                    cursor.x = 0;
-                    cursor.y = 0;
-                }
-                else if (key == Key.End)
-                {
-                    cursor.endY();
-                    cursor.endX();
-                }
-
-                displayCursor();
 
                 return;
             }
@@ -86,10 +96,6 @@ namespace TextEditor.Controller
             if (isTextKey(key))
             {
                 command = new AddCharCommand(key);
-            }
-            else if (isArrowKey(key))
-            {
-                moveCaret(key);
             }
             else if (key == Key.Back)
             {
@@ -104,10 +110,6 @@ namespace TextEditor.Controller
             {
                 command.SetParameters(text, cursor);
                 executeCommand(command);
-            }
-
-            if (key != Key.LeftShift && key != Key.RightShift)
-            {
                 renderer.DisplayText(transformText(text.text));
                 displayCursor();
             }
@@ -335,9 +337,27 @@ namespace TextEditor.Controller
 
         public void setCursorFromPoint(Point point)
         {
+            bool selectionChanged = false;
+
+            if (!ShiftPressed())
+            {
+                selection = null;
+                selectionChanged = true;
+            }
+            else if (selection == null)
+            {
+                selection = new TextSelection(text, cursor);
+            }
+
             int currentHit = renderer.getCurrentHit(point);
             
             cursor.setHitPosition(currentHit);
+
+            if (selection != null || selectionChanged)
+            {
+                renderer.DisplayText(transformText(text.text));
+            }
+
             displayCursor();
         }
     }
