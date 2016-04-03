@@ -12,7 +12,14 @@ namespace TextEditor.Logic
 
         private TextCursor cursor2;
 
-        public TextSelection(Text text, TextCursor cursor)
+        public bool initialized
+        {
+            get;
+
+            private set;
+        }
+
+        public void initSelection(Text text, TextCursor cursor)
         {
             cursor1 = new TextCursor();
             cursor1.setText(text);
@@ -20,11 +27,17 @@ namespace TextEditor.Logic
             cursor1.y = cursor.y;
 
             cursor2 = cursor;
+            initialized = true;
         }
 
         public bool selectionExists()
         {
-            return cursor1.x != cursor2.x || cursor1.y != cursor2.y;
+            return initialized && (cursor1.x != cursor2.x || cursor1.y != cursor2.y);
+        }
+
+        public void deinitSelection()
+        {
+            initialized = false;
         }
 
         public string getSelectedText()

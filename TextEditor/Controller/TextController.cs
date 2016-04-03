@@ -17,7 +17,7 @@ namespace TextEditor.Controller
 
         private TextCursor cursor = new TextCursor();
 
-        private TextSelection selection;
+        private TextSelection selection = new TextSelection();
 
         private TextEditorRenderer renderer;
 
@@ -37,9 +37,9 @@ namespace TextEditor.Controller
             // todo: refactoring
             AbstractCommand command = null;
 
-            if (ShiftPressed() && isArrowKey(key) && selection == null)
+            if (ShiftPressed() && isArrowKey(key) && !selection.initialized)
             {
-                selection = new TextSelection(text, cursor);
+                selection.initSelection(text, cursor);
             }
 
             if (isArrowKey(key))
@@ -59,11 +59,11 @@ namespace TextEditor.Controller
                     moveCaret(key);
                 }
 
-                if (selection != null)
+                if (selection.initialized)
                 {
                     if (!ShiftPressed())
                     {
-                        selection = null;
+                        selection.deinitSelection();
                     }
 
                     renderer.DisplayText(transformText(text.text));
@@ -105,7 +105,7 @@ namespace TextEditor.Controller
             {
                 command = new ClearSelectionCommand(selection);
 
-                selection = null;
+                selection.deinitSelection();
             }
             else if (key == Key.Return)
             {
@@ -133,7 +133,7 @@ namespace TextEditor.Controller
             TextCursor leftSelectionCursor = null,
                 rightSelectionCursor = null;
 
-            if (selection != null && selection.selectionExists())
+            if (selection.selectionExists())
             {
                 leftSelectionCursor = selection.getLeftCursor();
                 rightSelectionCursor = selection.getRightCursor();
@@ -344,22 +344,22 @@ namespace TextEditor.Controller
         public void setCursorFromPoint(Point point)
         {
             bool selectionChanged = false;
-
+            
             if (!ShiftPressed())
             {
-                selection = null;
+                selection.deinitSelection();
                 selectionChanged = true;
             }
-            else if (selection == null)
+            else if (!selection.initialized)
             {
-                selection = new TextSelection(text, cursor);
+                selection.initSelection(text, cursor);
             }
 
             int currentHit = renderer.getCurrentHit(point);
             
             cursor.setHitPosition(currentHit);
 
-            if (selection != null || selectionChanged)
+            if (selection.initialized || selectionChanged)
             {
                 renderer.DisplayText(transformText(text.text));
             }
