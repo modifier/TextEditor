@@ -97,9 +97,15 @@ namespace TextEditor.Controller
             {
                 command = new AddCharCommand(key);
             }
-            else if (key == Key.Back)
+            else if (key == Key.Back && selection == null)
             {
                 command = new RemoveCharCommand();
+            }
+            else if ((key == Key.Back || key == Key.Delete) && selection != null)
+            {
+                command = new ClearSelectionCommand(selection);
+
+                selection = null;
             }
             else if (key == Key.Return)
             {
