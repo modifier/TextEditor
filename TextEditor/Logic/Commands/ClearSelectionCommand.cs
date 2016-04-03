@@ -18,8 +18,12 @@ namespace TextEditor.Logic.Commands
 
         private string copiedText;
 
+        private TextSelection selection;
+
         public ClearSelectionCommand(TextSelection selection)
         {
+            this.selection = selection;
+
             cursor1X = selection.getLeftCursor().x;
             cursor1Y = selection.getLeftCursor().y;
             cursor2X = selection.getRightCursor().x;
@@ -34,25 +38,7 @@ namespace TextEditor.Logic.Commands
 
         protected override void executeAtomic()
         {
-            if (cursor1Y == cursor2Y)
-            {
-                string line = text.text[cursor1Y],
-                    leftPart = line.Substring(0, cursor1X),
-                    rightPart = line.Substring(cursor2X);
-
-                text.text[cursor1Y] = leftPart + rightPart;
-
-                return;
-            }
-
-            text.text[cursor1Y] = text.text[cursor1Y].Substring(0, cursor1X);
-
-            for (int y = cursor1Y + 1; y <= cursor2Y - 1; y++)
-            {
-                text.text.RemoveAt(y);
-            }
-
-            text.text[cursor1Y + 1] = text.text[cursor1Y + 1].Substring(cursor2X);
+            text.deleteText(cursor1X, cursor1Y, cursor2X, cursor2Y);
         }
 
         protected override bool stacksWith(AbstractCommand command)
@@ -62,7 +48,7 @@ namespace TextEditor.Logic.Commands
 
         protected override void undoAtomic()
         {
-            
+            text.insertText(cursor1X, cursor1Y, copiedText);
         }
     }
 }

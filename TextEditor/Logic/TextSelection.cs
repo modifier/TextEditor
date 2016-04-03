@@ -12,6 +12,8 @@ namespace TextEditor.Logic
 
         private TextCursor cursor2;
 
+        private Text text;
+
         public bool initialized
         {
             get;
@@ -21,6 +23,8 @@ namespace TextEditor.Logic
 
         public void initSelection(Text text, TextCursor cursor)
         {
+            this.text = text;
+
             cursor1 = new TextCursor();
             cursor1.setText(text);
             cursor1.x = cursor.x;
@@ -42,9 +46,25 @@ namespace TextEditor.Logic
 
         public string getSelectedText()
         {
-            // todo
+            TextCursor leftCursor = getLeftCursor(),
+                rightCursor = getRightCursor();
 
-            return "";
+            if (leftCursor.y == rightCursor.y)
+            {
+                return text.text[leftCursor.y].Substring(leftCursor.x, rightCursor.x - leftCursor.x);
+            }
+
+            List<string> lines = new List<string>();
+            lines.Add(text.text[leftCursor.y].Substring(leftCursor.x));
+
+            for (int y = leftCursor.y + 1; y < rightCursor.y; y++)
+            {
+                lines.Add(text.text[y]);
+            }
+
+            lines.Add(text.text[leftCursor.y].Substring(0, rightCursor.x));
+
+            return String.Join("\n", lines);
         }
 
         public TextCursor getLeftCursor()
