@@ -290,6 +290,7 @@ namespace TextEditor.Controller
             undoed = previous;
 
             renderer.DisplayText(transformText(text.text));
+            displayCursor();
         }
 
         private void redo()
@@ -304,6 +305,7 @@ namespace TextEditor.Controller
             undoed = next.nextLink;
 
             renderer.DisplayText(transformText(text.text));
+            displayCursor();
         }
 
         private void moveCaret(Key key)
