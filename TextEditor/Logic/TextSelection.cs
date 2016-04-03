@@ -62,7 +62,7 @@ namespace TextEditor.Logic
                 lines.Add(text.text[y]);
             }
 
-            lines.Add(text.text[leftCursor.y].Substring(0, rightCursor.x));
+            lines.Add(text.text[rightCursor.y].Substring(0, rightCursor.x));
 
             return String.Join("\n", lines);
         }

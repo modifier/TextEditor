@@ -140,7 +140,7 @@ namespace TextEditor.Logic
 
             for (int y = cursor1Y + 1; y <= cursor2Y - 1; y++)
             {
-                text.RemoveAt(y);
+                text.RemoveAt(cursor1Y + 1);
             }
 
             text[cursor1Y + 1] = text[cursor1Y + 1].Substring(cursor2X);
