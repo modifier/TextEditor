@@ -25,28 +25,7 @@ namespace TextEditor.Logic.Commands
 
         protected override void executeAtomic()
         {
-            string[] lines = selectionText.Split('\n');
-
-            if (lines.Length == 1)
-            {
-                text.text[cursorY] = text.text[cursorY].Insert(cursorX, lines[0]);
-
-                return;
-            }
-
-            string leftPart = text.text[cursorY].Substring(0, cursorX),
-                rightPart = text.text[cursorY].Substring(cursorX);
-
-            int verticalCursor = cursorY;
-
-            text.text[verticalCursor] = leftPart + lines[0];
-
-            for (int i = 1; i < lines.Length - 1; i++)
-            {
-                text.text.Insert(verticalCursor, lines[i]);
-            }
-
-            text.text[verticalCursor] = lines[lines.Length - 1] + rightPart;
+            text.insertText(cursorX, cursorY, selectionText);
         }
 
         protected override bool stacksWith(AbstractCommand command)
@@ -56,7 +35,7 @@ namespace TextEditor.Logic.Commands
 
         protected override void undoAtomic()
         {
-            throw new NotImplementedException();
+            // todo
         }
     }
 }

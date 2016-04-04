@@ -84,6 +84,14 @@ namespace TextEditor.Controller
                 {
                     redo();
                 }
+                else if (key == Key.C)
+                {
+                    copySelection();
+                }
+                else if (key == Key.V)
+                {
+                    insertSelection();
+                }
 
                 return;
             }
@@ -114,7 +122,6 @@ namespace TextEditor.Controller
 
             if (command != null)
             {
-                command.SetParameters(text, cursor);
                 executeCommand(command);
                 renderer.DisplayText(transformText(text.text));
                 displayCursor();
@@ -261,7 +268,14 @@ namespace TextEditor.Controller
 
         private void executeCommand(AbstractCommand command)
         {
-            if (command == null || !command.isExecutable())
+            if (command == null)
+            {
+                return;
+            }
+
+            command.SetParameters(text, cursor);
+
+            if (!command.isExecutable())
             {
                 return;
             }
@@ -366,6 +380,39 @@ namespace TextEditor.Controller
                 renderer.DisplayText(transformText(text.text));
             }
 
+            displayCursor();
+        }
+
+        private void copySelection()
+        {
+            if (!selection.selectionExists())
+            {
+                return;
+            }
+
+            Clipboard.SetText(selection.getSelectedText());
+        }
+
+        private void insertSelection()
+        {
+            var data = Clipboard.GetText();
+
+            if (data == null)
+            {
+                return;
+            }
+
+            if (selection.initialized)
+            {
+                executeCommand(new ClearSelectionCommand(selection));
+
+                selection.deinitSelection();
+            }
+
+            var command = new InsertTextCommand(selection, data);
+            executeCommand(command);
+
+            renderer.DisplayText(transformText(text.text));
             displayCursor();
         }
     }

@@ -120,7 +120,8 @@ namespace TextEditor.Logic
             }
 
             verticalCursor++;
-            text[verticalCursor] = lines[lines.Length - 1] + text[verticalCursor];
+            string lastPart = text.Count < verticalCursor ? text[verticalCursor] : "";
+            text.Insert(verticalCursor, lines[lines.Length - 1] + lastPart);
         }
 
         public void deleteText(int cursor1X, int cursor1Y, int cursor2X, int cursor2Y)
