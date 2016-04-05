@@ -27,8 +27,8 @@ namespace TextEditor.Logic
 
             cursor1 = new TextCursor();
             cursor1.setText(text);
-            cursor1.x = cursor.x;
             cursor1.y = cursor.y;
+            cursor1.x = cursor.x;
 
             cursor2 = cursor;
             initialized = true;
