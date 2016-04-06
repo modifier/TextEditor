@@ -34,6 +34,20 @@ namespace TextEditor.Logic
             initialized = true;
         }
 
+        public void selectAll(Text text, TextCursor cursor)
+        {
+            this.text = text;
+            cursor1 = new TextCursor();
+            cursor1.setText(text);
+            cursor1.y = 0;
+            cursor1.x = 0;
+
+            cursor2 = cursor;
+            cursor2.endY();
+            cursor2.endX();
+            initialized = true;
+        }
+
         public bool selectionExists()
         {
             return initialized && (cursor1.x != cursor2.x || cursor1.y != cursor2.y);

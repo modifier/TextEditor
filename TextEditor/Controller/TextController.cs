@@ -92,6 +92,10 @@ namespace TextEditor.Controller
                 {
                     insertSelection();
                 }
+                else if (key == Key.A)
+                {
+                    selectAll();
+                }
 
                 return;
             }
@@ -411,6 +415,14 @@ namespace TextEditor.Controller
 
             var command = new InsertTextCommand(selection, data);
             executeCommand(command);
+
+            renderer.DisplayText(transformText(text.text));
+            displayCursor();
+        }
+
+        private void selectAll()
+        {
+            selection.selectAll(text, cursor);
 
             renderer.DisplayText(transformText(text.text));
             displayCursor();
