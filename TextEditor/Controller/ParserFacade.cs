@@ -72,44 +72,30 @@ SimpleArithmetics {
 
             string joinedText = string.Join("\n", text);
 
-            bool selectionRun = false;
-            TextCursor leftSelectionCursor = null,
-                rightSelectionCursor = null;
-
-            int leftSelectionCursorPosition = -1,
-                rightSelectionCursorPosition = -1;
-
-            if (selection.selectionExists())
-            {
-                leftSelectionCursor = selection.getLeftCursor();
-                rightSelectionCursor = selection.getRightCursor();
-
-                leftSelectionCursorPosition = leftSelectionCursor.getHitPosition();
-                rightSelectionCursorPosition = rightSelectionCursor.getHitPosition();
-            }
+            var terminals = getTerminals(joinedText);
+            int tokenId = 0;
 
             string currentLine = "";
             for (int i = 0; i < joinedText.Length; i++)
             {
-                if (i == leftSelectionCursorPosition)
-                {
-                    selectionRun = true;
+                var token = tokenId < terminals.Count ? terminals[tokenId] : null;
 
-                    Runs.Add(new CustomTextRun { Text = currentLine, IsSelection = false });
-                    currentLine = "";
-                }
-                else if (i == rightSelectionCursorPosition)
+                if (token != null && isTokenStart(token, joinedText, i))
                 {
-                    selectionRun = false;
-
-                    Runs.Add(new CustomTextRun { Text = currentLine, IsSelection = true });
+                    Runs.Add(new CustomTextRun { Text = currentLine });
+                    Runs.Add(new CustomTextRun { Text = token.Content });
                     currentLine = "";
+
+                    i += token.Content.Length - 1;
+                    tokenId++;
+
+                    continue;
                 }
 
                 if (joinedText[i] == '\n')
                 {
-                    Runs.Add(new CustomTextRun { Text = currentLine, IsSelection = selectionRun });
-                    Runs.Add(new CustomTextRun { IsEndParagraph = true, IsSelection = selectionRun });
+                    Runs.Add(new CustomTextRun { Text = currentLine });
+                    Runs.Add(new CustomTextRun { IsEndParagraph = true });
                     currentLine = "";
 
                     continue;
@@ -118,10 +104,25 @@ SimpleArithmetics {
                 currentLine += joinedText[i];
             }
             
-            Runs.Add(new CustomTextRun { Text = currentLine, IsSelection = selectionRun });
-            Runs.Add(new CustomTextRun { IsEndParagraph = true, IsSelection = selectionRun });
+            Runs.Add(new CustomTextRun { Text = currentLine });
+            Runs.Add(new CustomTextRun { IsEndParagraph = true });
 
             return Runs;
+        }
+
+        private bool isTokenStart(IParsingTreeTerminal token, string text, int position)
+        {
+            string tokenContent = token.Content;
+
+            for (int i = 0; i < token.Content.Length; i++)
+            {
+                if (text[position + i] != tokenContent[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }
