@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TextEditor.Logic;
+using TextEditor.Visual;
 
 namespace TextEditor.Controller
 {
@@ -62,6 +64,87 @@ SimpleArithmetics {
             var flattener = new TreeFlattener(tree);
 
             return flattener.getTerminals();
+        }
+
+        public List<CustomTextRun> getTransformedText(List<string> text, TextSelection selection)
+        {
+            List<CustomTextRun> Runs = new List<CustomTextRun>();
+
+            var result = getTerminals(string.Join("\n", text));
+
+            int i = 0;
+            bool selectionRun = false;
+            TextCursor leftSelectionCursor = null,
+                rightSelectionCursor = null;
+
+            if (selection.selectionExists())
+            {
+                leftSelectionCursor = selection.getLeftCursor();
+                rightSelectionCursor = selection.getRightCursor();
+            }
+
+            foreach (var line in text)
+            {
+                // todo: refactoring
+
+                if (leftSelectionCursor != null && leftSelectionCursor.y == i && rightSelectionCursor.y == i)
+                {
+                    string leftPart = line.Substring(0, leftSelectionCursor.x),
+                        middlePart = line.Substring(leftSelectionCursor.x, rightSelectionCursor.x - leftSelectionCursor.x),
+                        rightPart = line.Substring(rightSelectionCursor.x);
+
+                    if (leftPart.Length != 0)
+                    {
+                        Runs.Add(new CustomTextRun { Text = leftPart });
+                    }
+
+                    Runs.Add(new CustomTextRun { Text = middlePart, IsSelection = true });
+
+                    if (rightPart.Length != 0)
+                    {
+                        Runs.Add(new CustomTextRun { Text = rightPart });
+                    }
+                }
+                else if (leftSelectionCursor != null && leftSelectionCursor.y == i)
+                {
+                    string leftPart = line.Substring(0, leftSelectionCursor.x),
+                        rightPart = line.Substring(leftSelectionCursor.x);
+
+                    if (leftPart.Length != 0)
+                    {
+                        Runs.Add(new CustomTextRun { Text = leftPart });
+                    }
+
+                    Runs.Add(new CustomTextRun { Text = rightPart, IsSelection = true });
+                    selectionRun = true;
+                }
+                else if (selectionRun && rightSelectionCursor.y == i)
+                {
+                    string leftPart = line.Substring(0, rightSelectionCursor.x),
+                        rightPart = line.Substring(rightSelectionCursor.x);
+
+                    if (leftPart.Length != 0)
+                    {
+                        Runs.Add(new CustomTextRun { Text = leftPart, IsSelection = true });
+                    }
+
+                    Runs.Add(new CustomTextRun { Text = rightPart });
+                    selectionRun = false;
+                }
+                else if (selectionRun)
+                {
+                    Runs.Add(new CustomTextRun { Text = line, IsSelection = true });
+                }
+                else
+                {
+                    Runs.Add(new CustomTextRun { Text = line });
+                }
+
+                Runs.Add(new CustomTextRun { IsEndParagraph = true });
+                i++;
+            }
+
+            return Runs;
         }
     }
 }
