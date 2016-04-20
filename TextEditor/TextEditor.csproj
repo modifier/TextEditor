@@ -55,7 +55,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controller\ParserFacade.cs" />
     <Compile Include="Controller\TextController.cs" />
+    <Compile Include="Controller\TreeFlattener.cs" />
     <Compile Include="Logic\Commands\AbstractCommand.cs" />
     <Compile Include="Logic\Commands\AddCharCommand.cs" />
     <Compile Include="Logic\Commands\ClearSelectionCommand.cs" />

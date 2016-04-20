@@ -4,6 +4,9 @@ using System.Windows.Shapes;
 using System.Windows.Media.TextFormatting;
 using System.Windows;
 using System.Windows.Controls;
+using Portable.Parser;
+using Portable.Parser.Grammar;
+using System.Linq;
 
 namespace TextEditor.Visual
 {
