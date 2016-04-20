@@ -70,79 +70,56 @@ SimpleArithmetics {
         {
             List<CustomTextRun> Runs = new List<CustomTextRun>();
 
-            var result = getTerminals(string.Join("\n", text));
+            string joinedText = string.Join("\n", text);
 
-            int i = 0;
             bool selectionRun = false;
             TextCursor leftSelectionCursor = null,
                 rightSelectionCursor = null;
+
+            int leftSelectionCursorPosition = -1,
+                rightSelectionCursorPosition = -1;
 
             if (selection.selectionExists())
             {
                 leftSelectionCursor = selection.getLeftCursor();
                 rightSelectionCursor = selection.getRightCursor();
+
+                leftSelectionCursorPosition = leftSelectionCursor.getHitPosition();
+                rightSelectionCursorPosition = rightSelectionCursor.getHitPosition();
             }
 
-            foreach (var line in text)
+            string currentLine = "";
+            for (int i = 0; i < joinedText.Length; i++)
             {
-                // todo: refactoring
-
-                if (leftSelectionCursor != null && leftSelectionCursor.y == i && rightSelectionCursor.y == i)
+                if (i == leftSelectionCursorPosition)
                 {
-                    string leftPart = line.Substring(0, leftSelectionCursor.x),
-                        middlePart = line.Substring(leftSelectionCursor.x, rightSelectionCursor.x - leftSelectionCursor.x),
-                        rightPart = line.Substring(rightSelectionCursor.x);
-
-                    if (leftPart.Length != 0)
-                    {
-                        Runs.Add(new CustomTextRun { Text = leftPart });
-                    }
-
-                    Runs.Add(new CustomTextRun { Text = middlePart, IsSelection = true });
-
-                    if (rightPart.Length != 0)
-                    {
-                        Runs.Add(new CustomTextRun { Text = rightPart });
-                    }
-                }
-                else if (leftSelectionCursor != null && leftSelectionCursor.y == i)
-                {
-                    string leftPart = line.Substring(0, leftSelectionCursor.x),
-                        rightPart = line.Substring(leftSelectionCursor.x);
-
-                    if (leftPart.Length != 0)
-                    {
-                        Runs.Add(new CustomTextRun { Text = leftPart });
-                    }
-
-                    Runs.Add(new CustomTextRun { Text = rightPart, IsSelection = true });
                     selectionRun = true;
+
+                    Runs.Add(new CustomTextRun { Text = currentLine, IsSelection = false });
+                    currentLine = "";
                 }
-                else if (selectionRun && rightSelectionCursor.y == i)
+                else if (i == rightSelectionCursorPosition)
                 {
-                    string leftPart = line.Substring(0, rightSelectionCursor.x),
-                        rightPart = line.Substring(rightSelectionCursor.x);
-
-                    if (leftPart.Length != 0)
-                    {
-                        Runs.Add(new CustomTextRun { Text = leftPart, IsSelection = true });
-                    }
-
-                    Runs.Add(new CustomTextRun { Text = rightPart });
                     selectionRun = false;
-                }
-                else if (selectionRun)
-                {
-                    Runs.Add(new CustomTextRun { Text = line, IsSelection = true });
-                }
-                else
-                {
-                    Runs.Add(new CustomTextRun { Text = line });
+
+                    Runs.Add(new CustomTextRun { Text = currentLine, IsSelection = true });
+                    currentLine = "";
                 }
 
-                Runs.Add(new CustomTextRun { IsEndParagraph = true });
-                i++;
+                if (joinedText[i] == '\n')
+                {
+                    Runs.Add(new CustomTextRun { Text = currentLine, IsSelection = selectionRun });
+                    Runs.Add(new CustomTextRun { IsEndParagraph = true, IsSelection = selectionRun });
+                    currentLine = "";
+
+                    continue;
+                }
+
+                currentLine += joinedText[i];
             }
+            
+            Runs.Add(new CustomTextRun { Text = currentLine, IsSelection = selectionRun });
+            Runs.Add(new CustomTextRun { IsEndParagraph = true, IsSelection = selectionRun });
 
             return Runs;
         }
