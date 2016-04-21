@@ -34,7 +34,7 @@ namespace TextEditor.Visual
         {
             get
             {
-                return configuration.FontSize;
+                return (int) configuration.FontSize;
             }
         }
 
@@ -42,7 +42,7 @@ namespace TextEditor.Visual
         {
             get
             {
-                return configuration.FontSize;
+                return (int) configuration.FontSize;
             }
         }
 

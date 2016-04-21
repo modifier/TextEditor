@@ -47,7 +47,7 @@ namespace TextEditor.Visual
                 false,
                 new CustomTextRunProperties(scheme.GetDefaultConfiguration()),
                 TextWrapping.NoWrap,
-                scheme.GetDefaultConfiguration().TextHeight,
+                (int) scheme.GetDefaultConfiguration().TextHeight,
                 0
             );
             int textStorePosition = 0;

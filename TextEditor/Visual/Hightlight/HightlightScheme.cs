@@ -9,7 +9,7 @@ namespace TextEditor.Visual.Hightlight
 {
     class HightlightScheme
     {
-        private Dictionary<string, Brush> scheme = new Dictionary<string, Brush>();
+        private Dictionary<string, TextEditorConfiguration> scheme = new Dictionary<string, TextEditorConfiguration>();
 
         private TextEditorConfiguration defaultConfiguration;
 
@@ -18,29 +18,21 @@ namespace TextEditor.Visual.Hightlight
             this.defaultConfiguration = defaultConfiguration;
         }
 
-        public void AddHightlightRule(string ruleName, Brush color)
+        public void AddHightlightRule(string ruleName, TextEditorConfiguration configuration)
         {
-            scheme.Add(ruleName, color);
-        }
+            if (scheme.ContainsKey(ruleName))
+            {
+                return;
+            }
 
-        public Brush GetHighlightColor(string ruleName)
-        {
-            return scheme.ContainsKey(ruleName) ? scheme[ruleName] : defaultConfiguration.ForegroundColor;
+            configuration.MergeConfiguration(defaultConfiguration);
+
+            scheme.Add(ruleName, configuration);
         }
 
         public TextEditorConfiguration GetConfiguration(string ruleName)
         {
-            if (ruleName == "" || ruleName == null)
-            {
-                return defaultConfiguration;
-            }
-
-            return new TextEditorConfiguration {
-                FontFamily = defaultConfiguration.FontFamily,
-                FontSize = defaultConfiguration.FontSize,
-                TextHeight = defaultConfiguration.TextHeight,
-                ForegroundColor = GetHighlightColor(ruleName)
-            };
+            return ruleName != null && scheme.ContainsKey(ruleName) ? scheme[ruleName] : defaultConfiguration;
         }
 
         public TextEditorConfiguration GetDefaultConfiguration()
