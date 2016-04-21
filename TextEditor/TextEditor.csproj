@@ -64,6 +64,7 @@
     <Compile Include="Logic\Commands\InsertTextCommand.cs" />
     <Compile Include="Logic\Commands\RemoveCharCommand.cs" />
     <Compile Include="Logic\Commands\ReturnCaretCommand.cs" />
+    <Compile Include="Visual\HightlightScheme.cs" />
     <Compile Include="Logic\TextCursor.cs" />
     <Compile Include="Logic\KeyTranslator.cs" />
     <Compile Include="Logic\Text.cs" />
@@ -75,7 +76,6 @@
     <Compile Include="Visual\CustomTextRun.cs" />
     <Compile Include="Visual\CustomTextRunProperties.cs" />
     <Compile Include="Visual\CustomTextSource.cs" />
-    <Compile Include="Visual\SelectionTextRunProperties.cs" />
     <Compile Include="Visual\TextEditorConfiguration.cs" />
     <Compile Include="Visual\TextEditorRenderer.cs" />
     <Page Include="MainWindow.xaml">

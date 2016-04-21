@@ -83,7 +83,7 @@ SimpleArithmetics {
                 if (token != null && isTokenStart(token, joinedText, i))
                 {
                     Runs.Add(new CustomTextRun { Text = currentLine });
-                    Runs.Add(new CustomTextRun { Text = token.Content });
+                    Runs.Add(new CustomTextRun { Text = token.Content, RuleName = token.Rule.Name });
                     currentLine = "";
 
                     i += token.Content.Length - 1;

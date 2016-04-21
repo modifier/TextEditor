@@ -14,7 +14,7 @@ namespace TextEditor.Visual
     {
         private DrawingGroup dg;
         private Rectangle Rectus;
-        private TextEditorConfiguration configuration;
+        private HightlightScheme scheme;
         private Line cursor = null;
         private Canvas surface;
         private List<TextLine> cachedLines = new List<TextLine>();
@@ -26,9 +26,9 @@ namespace TextEditor.Visual
             this.surface = surface;
         }
 
-        public void SetConfiguration(TextEditorConfiguration configuration)
+        public void SetHightlightScheme(HightlightScheme scheme)
         {
-            this.configuration = configuration;
+            this.scheme = scheme;
         }
 
         public void DisplayText(List<CustomTextRun> runs)
@@ -37,16 +37,16 @@ namespace TextEditor.Visual
 
             var dc = dg.Open();
 
-            var textSource = new CustomTextSource(runs, configuration);
+            var textSource = new CustomTextSource(runs, scheme);
             var formatter = TextFormatter.Create();
             var properties = new CustomTextParagraphProperties(
                 FlowDirection.LeftToRight,
                 TextAlignment.Left,
                 true,
                 false,
-                new CustomTextRunProperties(configuration),
+                new CustomTextRunProperties(scheme.GetDefaultConfiguration()),
                 TextWrapping.NoWrap,
-                configuration.TextHeight,
+                scheme.GetDefaultConfiguration().TextHeight,
                 0
             );
             int textStorePosition = 0;

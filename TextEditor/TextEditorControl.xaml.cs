@@ -22,7 +22,11 @@ namespace TextEditor
             InitializeComponent();
 
             renderer = new TextEditorRenderer(mainBrush, Rectus, Surface);
-            renderer.SetConfiguration(new TextEditorConfiguration { FontFamily = "Lucida Console", FontSize = 14, TextHeight = 14, ForegroundColor = Brushes.Black });
+
+            HightlightScheme scheme = new HightlightScheme(new TextEditorConfiguration { FontFamily = "Lucida Console", FontSize = 14, TextHeight = 14, ForegroundColor = Brushes.Black });
+            scheme.AddHightlightRule("braces", Brushes.Violet);
+            scheme.AddHightlightRule("num", Brushes.DarkRed);
+            renderer.SetHightlightScheme(scheme);
 
             controller = new TextController(renderer);
         }

@@ -8,6 +8,7 @@ namespace TextEditor.Visual
 {
     class CustomTextRun
     {
+        public string RuleName;
         public string Text;
         public bool IsEndParagraph;
         public bool IsSelection;
