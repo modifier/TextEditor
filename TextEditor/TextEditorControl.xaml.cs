@@ -5,6 +5,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using TextEditor.Controller;
 using TextEditor.Visual;
+using TextEditor.Visual.Hightlight;
 
 namespace TextEditor
 {
@@ -17,18 +18,57 @@ namespace TextEditor
 
         private TextController controller;
 
+        private string grammar = @"[OmitPattern(""[\s]*"")]
+[RootRule(expr)]
+SimpleArithmetics {
+
+    productOp: '*' | '/';
+    sumOp: '+' | '-';
+
+    [RewriteRecursion]
+    /*[ExpandRecursion]*/
+    #expr: {
+        |sum: expr sumOp expr;
+        |product: expr productOp expr;
+        |[right]power: expr '^' expr;
+        |#braces: '(' expr ')';
+        |num: ""[0-9]+"";
+    };
+}";
+
+        private string highlight = @"!default {
+	color: #000000;
+	background: #ffffff;
+}
+
+num {
+	color: #0000ff;
+}
+
+sumOp, productOp {
+	color: #008800;
+}
+
+/braces, braces/braces {
+	color: #888888;
+}
+
+braces {
+	background: #00ffff;
+}";
+
         public TextEditorControl()
         {
             InitializeComponent();
 
             renderer = new TextEditorRenderer(mainBrush, Rectus, Surface);
 
-            HightlightScheme scheme = new HightlightScheme(new TextEditorConfiguration { FontFamily = "Lucida Console", FontSize = 14, TextHeight = 14, ForegroundColor = Brushes.Black });
-            scheme.AddHightlightRule("braces", Brushes.Violet);
-            scheme.AddHightlightRule("num", Brushes.DarkRed);
-            renderer.SetHightlightScheme(scheme);
+            HighlightImporter importer = new HighlightImporter();
+            renderer.SetHightlightScheme(importer.ImportHighlightScheme(highlight));
 
-            controller = new TextController(renderer);
+            ParserFacade parser = new ParserFacade(grammar);
+
+            controller = new TextController(renderer, parser);
         }
 
         private void UserControl_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

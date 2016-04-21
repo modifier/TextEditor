@@ -14,25 +14,7 @@ namespace TextEditor.Controller
     {
         private IParserFabric factory;
 
-        private string grammar = @"[OmitPattern(""[\s]*"")]
-[RootRule(expr)]
-SimpleArithmetics {
-
-    productOp: '*' | '/';
-    sumOp: '+' | '-';
-
-    [RewriteRecursion]
-    /*[ExpandRecursion]*/
-    #expr: {
-        |sum: expr sumOp expr;
-        |product: expr productOp expr;
-        |[right]power: expr '^' expr;
-        |#braces: '(' expr ')';
-        |num: ""[0-9]+"";
-    };
-}";
-
-        public ParserFacade()
+        public ParserFacade(string grammar)
         {
             factory = getParserFactory(grammar);
         }
@@ -45,7 +27,7 @@ SimpleArithmetics {
             return Parsers.CreateFabric(rules.First().Name, rules);
         }
 
-        private ITreeParsingResult getTree(string text)
+        public ITreeParsingResult getTree(string text)
         {
             var textReader = new StringSourceTextReader(text);
             var parser = factory.CreateTreeParser();

@@ -64,7 +64,8 @@
     <Compile Include="Logic\Commands\InsertTextCommand.cs" />
     <Compile Include="Logic\Commands\RemoveCharCommand.cs" />
     <Compile Include="Logic\Commands\ReturnCaretCommand.cs" />
-    <Compile Include="Visual\HightlightScheme.cs" />
+    <Compile Include="Visual\Hightlight\HighlightImporter.cs" />
+    <Compile Include="Visual\Hightlight\HightlightScheme.cs" />
     <Compile Include="Logic\TextCursor.cs" />
     <Compile Include="Logic\KeyTranslator.cs" />
     <Compile Include="Logic\Text.cs" />
@@ -127,6 +128,9 @@
       <Project>{37be400a-85e5-4078-b180-ecf3cbe833bb}</Project>
       <Name>Portable.Parser</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ColoringGrammar.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

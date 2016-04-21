@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Media.TextFormatting;
+using TextEditor.Visual.Hightlight;
 
 namespace TextEditor.Visual
 {

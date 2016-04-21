@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 
-namespace TextEditor.Visual
+namespace TextEditor.Visual.Hightlight
 {
     class HightlightScheme
     {

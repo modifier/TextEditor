@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using Portable.Parser;
 using Portable.Parser.Grammar;
 using System.Linq;
+using TextEditor.Visual.Hightlight;
 
 namespace TextEditor.Visual
 {

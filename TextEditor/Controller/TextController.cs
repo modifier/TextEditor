@@ -24,10 +24,11 @@ namespace TextEditor.Controller
 
         private AbstractCommand undoed;
 
-        private ParserFacade parser = new ParserFacade();
+        private ParserFacade parser;
 
-        public TextController(TextEditorRenderer renderer)
+        public TextController(TextEditorRenderer renderer, ParserFacade parser)
         {
+            this.parser = parser;
             this.renderer = renderer;
             text = new Text(cursor);
             cursor.setText(text);
