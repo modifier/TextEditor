@@ -8,6 +8,7 @@ using Portable.Parser;
 using Portable.Parser.Grammar;
 using System.Linq;
 using TextEditor.Visual.Hightlight;
+using TextEditor.Logic;
 
 namespace TextEditor.Visual
 {
@@ -17,6 +18,7 @@ namespace TextEditor.Visual
         private Rectangle Rectus;
         private HightlightScheme scheme;
         private Line cursor = null;
+        private List<Rectangle> selectionRectangles = new List<Rectangle>();
         private Canvas surface;
         private List<TextLine> cachedLines = new List<TextLine>();
 
@@ -97,6 +99,51 @@ namespace TextEditor.Visual
             cursor.X1 = cursor.X2 = position;
             cursor.Y1 = y1;
             cursor.Y2 = y1 + cachedLines[cursorY].Height;
+        }
+
+        public void DisplaySelection(TextSelection selection)
+        {
+            foreach (Rectangle selectionRect in selectionRectangles)
+            {
+                surface.Children.Remove(selectionRect);
+            }
+
+            selectionRectangles.Clear();
+
+            if (!selection.selectionExists())
+            {
+                return;
+            }
+
+            TextCursor leftCursor = selection.getLeftCursor(),
+                rightCursor = selection.getRightCursor();
+
+            double leftPosition = cachedLines[leftCursor.y].GetDistanceFromCharacterHit(new CharacterHit(leftCursor.getHitPosition(), 0)),
+                rightPosition = cachedLines[rightCursor.y].GetDistanceFromCharacterHit(new CharacterHit(rightCursor.getHitPosition(), 0));
+
+
+            double y1 = 0;
+            for (int i = 0; i < leftCursor.y; i++)
+            {
+                y1 += cachedLines[i].Height;
+            }
+
+            double y2 = y1;
+            for (int i = leftCursor.y; i < rightCursor.y; i++)
+            {
+                y2 += cachedLines[i].Height;
+            }
+
+            Rectangle rect = new Rectangle();
+            rect.Fill = Brushes.LightBlue;
+            rect.Width = rightPosition - leftPosition;
+            rect.Height = y2 - y1 + cachedLines[rightCursor.y].Height;
+
+            surface.Children.Insert(0, rect);
+            Canvas.SetTop(rect, y1);
+            Canvas.SetLeft(rect, leftPosition);
+
+            selectionRectangles.Add(rect);
         }
 
         public int getCurrentHit(Point point)

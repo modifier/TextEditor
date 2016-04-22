@@ -287,6 +287,12 @@ namespace TextEditor.Controller
         private void displayCursor()
         {
             renderer.PlaceCursor(cursor.getHitPosition(), cursor.y);
+            displaySelection();
+        }
+
+        private void displaySelection()
+        {
+            renderer.DisplaySelection(selection);
         }
 
         public void setCursorFromPoint(Point point)
