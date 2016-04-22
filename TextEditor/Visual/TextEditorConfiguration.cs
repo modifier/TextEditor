@@ -14,6 +14,9 @@ namespace TextEditor.Visual
         public int? TextHeight;
         public Brush ForegroundColor;
         public Brush BackgroundColor;
+        public bool? IsItalic;
+        public bool? IsBold;
+        public bool? IsUnderline;
 
         public TextEditorConfiguration MergeConfiguration(TextEditorConfiguration config)
         {
@@ -40,6 +43,21 @@ namespace TextEditor.Visual
             if (BackgroundColor == null)
             {
                 BackgroundColor = config.BackgroundColor;
+            }
+
+            if (IsItalic == null)
+            {
+                IsItalic = config.IsItalic;
+            }
+
+            if (IsBold == null)
+            {
+                IsBold = config.IsBold;
+            }
+
+            if (IsUnderline == null)
+            {
+                IsUnderline = config.IsUnderline;
             }
 
             return this;

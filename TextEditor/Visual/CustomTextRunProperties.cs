@@ -74,7 +74,12 @@ namespace TextEditor.Visual
         {
             get
             {
-                return new Typeface(configuration.FontFamily);
+                return new Typeface(
+                    new FontFamily(configuration.FontFamily),
+                    configuration.IsItalic == true ? FontStyles.Italic : FontStyles.Normal,
+                    configuration.IsBold == true ? FontWeights.Heavy : FontWeights.Normal,
+                    FontStretches.Normal
+               );
             }
         }
     }

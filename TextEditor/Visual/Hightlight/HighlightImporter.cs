@@ -27,6 +27,8 @@ namespace TextEditor.Visual.Hightlight
 
         private Dictionary<string, TextEditorConfiguration> configurations;
 
+        private List<string> typefaceValues = new List<string>();
+
         public HighlightImporter()
         {
             string coloringGrammar = Properties.Resources.ColoringGrammar;
@@ -76,6 +78,21 @@ namespace TextEditor.Visual.Hightlight
                 currentConfiguration.BackgroundColor = (Brush)converter.ConvertFromString(((IParsingTreeTerminal)node).Content);
             }
 
+            if (node is IParsingTreeTerminal && node.Rule.Name == "italic" && HasParentRule("typefaceValue"))
+            {
+                typefaceValues.Add("italic");
+            }
+
+            if (node is IParsingTreeTerminal && node.Rule.Name == "bold" && HasParentRule("typefaceValue"))
+            {
+                typefaceValues.Add("bold");
+            }
+
+            if (node is IParsingTreeTerminal && node.Rule.Name == "underline" && HasParentRule("typefaceValue"))
+            {
+                typefaceValues.Add("underline");
+            }
+
             if (node is IParsingTreeGroup)
             {
                 foreach (IParsingTreeNode innerNode in ((IParsingTreeGroup)node).Childs)
@@ -88,6 +105,15 @@ namespace TextEditor.Visual.Hightlight
 
             if (node.Rule != null && node.Rule.Name == "rule" && (GetPreviousNode() == null || GetPreviousNode().Rule.Name != "rule"))
             {
+                if (typefaceValues.Count != 0)
+                {
+                    currentConfiguration.IsItalic = typefaceValues.Contains("italic");
+                    currentConfiguration.IsBold = typefaceValues.Contains("bold");
+                    currentConfiguration.IsUnderline = typefaceValues.Contains("underline");
+                }
+
+                typefaceValues.Clear();
+
                 foreach (string ruleName in ruleNames)
                 {
                     if (!configurations.ContainsKey(ruleName))
@@ -102,6 +128,15 @@ namespace TextEditor.Visual.Hightlight
 
             if (node.Rule != null && node.Rule.Name == "directive" && (GetPreviousNode() == null || GetPreviousNode().Rule.Name != "directive"))
             {
+                if (typefaceValues.Count != 0)
+                {
+                    currentConfiguration.IsItalic = typefaceValues.Contains("italic");
+                    currentConfiguration.IsBold = typefaceValues.Contains("bold");
+                    currentConfiguration.IsUnderline = typefaceValues.Contains("underline");
+                }
+
+                typefaceValues.Clear();
+
                 if (isDefaultConfiguration)
                 {
                     defaultConfiguration = currentConfiguration;
