@@ -82,8 +82,9 @@ braces {
             controller.setCursorFromPoint(position);
         }
 
-        private void UserControl_KeyDown(object sender, KeyEventArgs e)
+        private void ScrollViewer_PreviewKeyDown(object sender, KeyEventArgs e)
         {
+            e.Handled = true;
             controller.keyPress(e.Key);
         }
     }

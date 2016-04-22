@@ -6,9 +6,8 @@
              xmlns:local="clr-namespace:TextEditor"
              mc:Ignorable="d"
              Focusable="True"
-             KeyDown="UserControl_KeyDown"
              MouseLeftButtonDown="UserControl_MouseLeftButtonDown">
-    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" PreviewKeyDown="ScrollViewer_PreviewKeyDown">
         <Canvas Name="Surface" Margin="5" VerticalAlignment="Top" HorizontalAlignment="Left">
             <Rectangle Name="Rectus">
                 <Rectangle.Fill>
