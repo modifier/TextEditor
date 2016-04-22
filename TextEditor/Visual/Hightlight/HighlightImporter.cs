@@ -23,28 +23,31 @@ namespace TextEditor.Visual.Hightlight
 
         private List<string> ruleNames = new List<string>();
 
+        private bool isDefaultConfiguration = false;
+
+        private Dictionary<string, TextEditorConfiguration> configurations;
+
         public HighlightImporter()
         {
             string coloringGrammar = Properties.Resources.ColoringGrammar;
 
             parser = new ParserFacade(coloringGrammar);
-
-            defaultConfiguration = new TextEditorConfiguration { FontFamily = "Lucida Console", FontSize = 14, TextHeight = 14, ForegroundColor = Brushes.Black };
         }
 
         public HightlightScheme ImportHighlightScheme(string text)
         {
-            ITreeParsingResult tree = parser.getTree(text);
-            scheme = new HightlightScheme(defaultConfiguration);
+            configurations = new Dictionary<string, TextEditorConfiguration>();
+            defaultConfiguration = new TextEditorConfiguration();
 
+            ITreeParsingResult tree = parser.getTree(text);
             VisitNode(tree.Tree);
 
-            return scheme;
-        }
-
-        public HightlightScheme ImportHighlightScheme()
-        {
-            HightlightScheme scheme = new HightlightScheme(new TextEditorConfiguration { FontFamily = "Lucida Console", FontSize = 14, TextHeight = 14, ForegroundColor = Brushes.Black });
+            defaultConfiguration.MergeConfiguration(new TextEditorConfiguration { FontFamily = "Lucida Console", FontSize = 14, TextHeight = 14, ForegroundColor = Brushes.Black });
+            scheme = new HightlightScheme(defaultConfiguration);
+            foreach (KeyValuePair<string, TextEditorConfiguration> entry in configurations)
+            {
+                scheme.AddHightlightRule(entry.Key, entry.Value);
+            }
 
             return scheme;
         }
@@ -54,6 +57,11 @@ namespace TextEditor.Visual.Hightlight
             if (node is IParsingTreeTerminal && node.Rule.Name == "name" && HasParentRule("ruleName"))
             {
                 ruleNames.Add(((IParsingTreeTerminal) node).Content);
+            }
+
+            if (node is IParsingTreeTerminal && node.Rule.Name == "default_")
+            {
+                isDefaultConfiguration = true;
             }
 
             if (node is IParsingTreeTerminal && node.Rule.Name == "colorValue" && HasParentRule("color"))
@@ -82,10 +90,24 @@ namespace TextEditor.Visual.Hightlight
             {
                 foreach (string ruleName in ruleNames)
                 {
-                    scheme.AddHightlightRule(ruleName, currentConfiguration);
+                    if (!configurations.ContainsKey(ruleName))
+                    {
+                        configurations.Add(ruleName, currentConfiguration);
+                    }
                 }
 
                 ruleNames.Clear();
+                currentConfiguration = new TextEditorConfiguration();
+            }
+
+            if (node.Rule != null && node.Rule.Name == "directive" && (GetPreviousNode() == null || GetPreviousNode().Rule.Name != "directive"))
+            {
+                if (isDefaultConfiguration)
+                {
+                    defaultConfiguration = currentConfiguration;
+                }
+
+                isDefaultConfiguration = false;
                 currentConfiguration = new TextEditorConfiguration();
             }
         }

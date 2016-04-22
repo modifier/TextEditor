@@ -49,12 +49,12 @@ sumOp, productOp {
 	color: #008800;
 }
 
-/braces, braces/braces {
-	color: #888888;
-}
-
 braces {
 	background: #00ffff;
+}
+
+/braces, braces/braces {
+	color: #888888;
 }";
 
         public TextEditorControl()
