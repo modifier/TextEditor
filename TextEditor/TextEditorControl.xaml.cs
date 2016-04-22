@@ -39,7 +39,6 @@ SimpleArithmetics {
         private string highlight = @"!default {
 	color: #000000;
 	background: #ffffff;
-    face: bold italic;
 }
 
 num {

@@ -61,6 +61,7 @@ namespace TextEditor.Visual
                 {
                     r += currentRun.Length;
                 }
+
                 return r;
             }
         }

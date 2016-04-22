@@ -58,7 +58,17 @@ namespace TextEditor.Visual
         {
             get
             {
-                return new TextDecorationCollection();
+                TextDecorationCollection myCollection = new TextDecorationCollection();
+
+                if (configuration.IsUnderline == true)
+                {
+                    TextDecoration myUnderline = new TextDecoration();
+                    myUnderline.Pen = new Pen(configuration.ForegroundColor, 1);
+                    myUnderline.PenThicknessUnit = TextDecorationUnit.FontRecommended;
+                    myCollection.Add(myUnderline);
+                }
+
+                return myCollection;
             }
         }
 
