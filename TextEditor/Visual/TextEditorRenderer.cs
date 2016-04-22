@@ -121,23 +121,51 @@ namespace TextEditor.Visual
             double leftPosition = cachedLines[leftCursor.y].GetDistanceFromCharacterHit(new CharacterHit(leftCursor.getHitPosition(), 0)),
                 rightPosition = cachedLines[rightCursor.y].GetDistanceFromCharacterHit(new CharacterHit(rightCursor.getHitPosition(), 0));
 
+            
+            for (int i = leftCursor.y; i <= rightCursor.y; i++)
+            {
+                int positionLeft = 0,
+                    positionRight = 0;
 
+                if (leftCursor.y == i)
+                {
+                    positionLeft = leftCursor.getHitPosition();
+                }
+                else
+                {
+                    positionLeft = leftCursor.getLastHitPosition(i - 1);
+                }
+
+                if (rightCursor.y == i)
+                {
+                    positionRight = rightCursor.getHitPosition();
+                }
+                else
+                {
+                    positionRight = rightCursor.getLastHitPosition(i) - 1;
+                }
+
+                AddSelectionRectangle(i, positionLeft, positionRight);
+            }
+        }
+
+        private void AddSelectionRectangle(int line, int positionLeft, int positionRight)
+        {
             double y1 = 0;
-            for (int i = 0; i < leftCursor.y; i++)
+            for (int i = 0; i < line; i++)
             {
                 y1 += cachedLines[i].Height;
             }
 
-            double y2 = y1;
-            for (int i = leftCursor.y; i < rightCursor.y; i++)
-            {
-                y2 += cachedLines[i].Height;
-            }
+            double y2 = y1 + cachedLines[line].Height;
+
+            double leftPosition = cachedLines[line].GetDistanceFromCharacterHit(new CharacterHit(positionLeft, 0)),
+                rightPosition = cachedLines[line].GetDistanceFromCharacterHit(new CharacterHit(positionRight, 0));
 
             Rectangle rect = new Rectangle();
             rect.Fill = Brushes.LightBlue;
             rect.Width = rightPosition - leftPosition;
-            rect.Height = y2 - y1 + cachedLines[rightCursor.y].Height;
+            rect.Height = y2 - y1;
 
             surface.Children.Insert(0, rect);
             Canvas.SetTop(rect, y1);

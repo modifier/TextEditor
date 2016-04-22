@@ -117,6 +117,17 @@ namespace TextEditor.Logic
             return hitPosition + x;
         }
 
+        public int getLastHitPosition(int line)
+        {
+            int hitPosition = 0;
+            for (int i = 0; i <= line; i++)
+            {
+                hitPosition += text.text[i].Length + 1;
+            }
+
+            return hitPosition;
+        }
+
         public void setHitPosition(int hitPosition)
         {
             for (int i = 0; i <= y; i++)
