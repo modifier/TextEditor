@@ -71,6 +71,9 @@ namespace TextEditor.Visual
             dc.Close();
             Rectus.Width = rectDimensions[0];
             Rectus.Height = rectDimensions[1];
+
+            surface.Width = rectDimensions[0];
+            surface.Height = rectDimensions[1];
         }
 
         public void PlaceCursor(int hitPosition, int cursorY)

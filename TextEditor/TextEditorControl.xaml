@@ -8,15 +8,17 @@
              Focusable="True"
              KeyDown="UserControl_KeyDown"
              MouseLeftButtonDown="UserControl_MouseLeftButtonDown">
-    <Canvas Name="Surface" Margin="5">
-        <Rectangle Name="Rectus">
-            <Rectangle.Fill>
-                <DrawingBrush Stretch="None" AlignmentY="Top" AlignmentX="Left">
-                    <DrawingBrush.Drawing>
-                        <DrawingGroup x:Name="mainBrush" />
-                    </DrawingBrush.Drawing>
-                </DrawingBrush>
-            </Rectangle.Fill>
-        </Rectangle>
-    </Canvas>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        <Canvas Name="Surface" Margin="5" VerticalAlignment="Top" HorizontalAlignment="Left">
+            <Rectangle Name="Rectus">
+                <Rectangle.Fill>
+                    <DrawingBrush Stretch="None" AlignmentY="Top" AlignmentX="Left">
+                        <DrawingBrush.Drawing>
+                            <DrawingGroup x:Name="mainBrush" />
+                        </DrawingBrush.Drawing>
+                    </DrawingBrush>
+                </Rectangle.Fill>
+            </Rectangle>
+        </Canvas>
+    </ScrollViewer>
 </UserControl>
