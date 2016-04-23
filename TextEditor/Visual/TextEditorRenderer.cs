@@ -133,7 +133,7 @@ namespace TextEditor.Visual
                 }
                 else
                 {
-                    positionLeft = leftCursor.getLastHitPosition(i - 1);
+                    positionLeft = leftCursor.getHitPositionForLine(i - 1);
                 }
 
                 if (rightCursor.y == i)
@@ -142,7 +142,7 @@ namespace TextEditor.Visual
                 }
                 else
                 {
-                    positionRight = rightCursor.getLastHitPosition(i) - 1;
+                    positionRight = rightCursor.getHitPositionForLine(i) - 1;
                 }
 
                 AddSelectionRectangle(i, positionLeft, positionRight);

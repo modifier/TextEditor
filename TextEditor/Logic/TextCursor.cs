@@ -129,24 +129,12 @@ namespace TextEditor.Logic
 
         public int getHitPosition()
         {
-            int hitPosition = 0;
-            for (int i = 0; i < y; i++)
-            {
-                hitPosition += text.text[i].Length + 1;
-            }
-
-            return hitPosition + x;
+            return text.getHitPosition(x, y - 1);
         }
 
-        public int getLastHitPosition(int line)
+        public int getHitPositionForLine(int line)
         {
-            int hitPosition = 0;
-            for (int i = 0; i <= line; i++)
-            {
-                hitPosition += text.text[i].Length + 1;
-            }
-
-            return hitPosition;
+            return text.getHitPosition(0, line);
         }
 
         public void setHitPosition(int hitPosition)

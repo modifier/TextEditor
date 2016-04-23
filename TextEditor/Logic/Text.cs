@@ -24,6 +24,8 @@ namespace TextEditor.Logic
 
         public void RaiseTextChanged()
         {
+            cachedHitPositions.Clear();
+
             textChanged(this, new EventArgs());
         }
 
@@ -166,6 +168,37 @@ namespace TextEditor.Logic
 
             cursor.y = cursor1Y;
             cursor.x = cursor1X;
+        }
+
+        private List<int> cachedHitPositions = new List<int>();
+
+        public int getHitPosition(int x, int y)
+        {
+            return getHitPositionForLine(y) + x;
+        }
+
+        private int getHitPositionForLine(int y)
+        {
+            if (y < 0)
+            {
+                return 0;
+            }
+
+            if (cachedHitPositions.Count > y)
+            {
+                return cachedHitPositions[y];
+            }
+
+            int lastAvailableLine = cachedHitPositions.Count - 1,
+                hitPosition = lastAvailableLine >= 0 ? cachedHitPositions[lastAvailableLine] : 0;
+
+            for (int i = lastAvailableLine + 1; i <= y; i++)
+            {
+                hitPosition += text[i].Length + 1;
+                cachedHitPositions.Add(hitPosition);
+            }
+
+            return hitPosition;
         }
     }
 }
