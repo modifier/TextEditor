@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace TextEditor.Logic
 {
     class Text
     {
+        public event EventHandler textChanged;
+
         public List<string> text
         {
             get;
@@ -17,6 +20,11 @@ namespace TextEditor.Logic
         {
             text = new List<string>() { "" };
             this.cursor = cursor;
+        }
+
+        public void RaiseTextChanged()
+        {
+            textChanged(this, new EventArgs());
         }
 
         public string removePreviousLetter(int cursorX, int cursorY)
@@ -33,6 +41,7 @@ namespace TextEditor.Logic
                 string previousLine = text[cursorY - 1];
                 text.RemoveAt(cursorY);
                 text[cursorY - 1] = previousLine + currentLine;
+                RaiseTextChanged();
 
                 cursor.y = cursorY - 1;
                 cursor.x = previousLine.Length;
@@ -43,6 +52,7 @@ namespace TextEditor.Logic
             {
                 string cutLetter = currentLine[cursorX - 1].ToString();
                 text[cursorY] = currentLine.Remove(cursorX - 1, 1);
+                RaiseTextChanged();
 
                 cursor.y = cursorY;
                 cursor.x = cursorX - 1;
@@ -67,10 +77,12 @@ namespace TextEditor.Logic
                 string nextLine = text[cursorY + 1];
                 text.RemoveAt(cursorY + 1);
                 text[cursorY + 1] = currentLine + nextLine;
+                RaiseTextChanged();
             }
             else
             {
                 text[cursorY] = currentLine.Remove(cursorX);
+                RaiseTextChanged();
             }
         }
 
@@ -83,6 +95,7 @@ namespace TextEditor.Logic
 
             text[cursorY] = lineBefore;
             text.Insert(cursorY + 1, lineAfter);
+            RaiseTextChanged();
 
             cursor.y = cursorY + 1;
             cursor.x = 0;
@@ -93,6 +106,7 @@ namespace TextEditor.Logic
             string textLine = text[cursorY];
 
             text[cursorY] = textLine.Insert(cursorX, ch);
+            RaiseTextChanged();
 
             cursor.y = cursorY;
             cursor.x = cursorX + 1;
@@ -105,6 +119,7 @@ namespace TextEditor.Logic
             if (lines.Length == 1)
             {
                 text[cursorY] = text[cursorY].Insert(cursorX, lines[0]);
+                RaiseTextChanged();
 
                 return;
             }
@@ -122,6 +137,7 @@ namespace TextEditor.Logic
             verticalCursor++;
             string lastPart = text.Count < verticalCursor ? text[verticalCursor] : "";
             text.Insert(verticalCursor, lines[lines.Length - 1] + lastPart);
+            RaiseTextChanged();
         }
 
         public void deleteText(int cursor1X, int cursor1Y, int cursor2X, int cursor2Y)
@@ -133,6 +149,7 @@ namespace TextEditor.Logic
                     rightPart = line.Substring(cursor2X);
 
                 text[cursor1Y] = leftPart + rightPart;
+                RaiseTextChanged();
 
                 return;
             }
@@ -145,6 +162,7 @@ namespace TextEditor.Logic
             }
 
             text[cursor1Y + 1] = text[cursor1Y + 1].Substring(cursor2X);
+            RaiseTextChanged();
 
             cursor.y = cursor1Y;
             cursor.x = cursor1X;

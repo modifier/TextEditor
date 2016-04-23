@@ -12,7 +12,11 @@ namespace TextEditor.Logic
 
         private TextCursor cursor2;
 
+        private bool supressCursorEvents = false;
+
         private Text text;
+
+        public event EventHandler selectionChanged;
 
         public bool initialized
         {
@@ -21,17 +25,36 @@ namespace TextEditor.Logic
             private set;
         }
 
-        public void initSelection(Text text, TextCursor cursor)
+        public TextSelection(TextCursor cursor)
         {
+            cursor2 = cursor;
+            cursor2.positionChanged += delegate { RaiseSelectionChanged(true); };
+        }
+
+        public void RaiseSelectionChanged(bool cursorEvent)
+        {
+            if (supressCursorEvents && cursorEvent)
+            {
+                return;
+            }
+
+            selectionChanged(this, new EventArgs());
+        }
+
+        public void initSelection(Text text)
+        {
+            supressCursorEvents = true;
             this.text = text;
 
             cursor1 = new TextCursor();
-            cursor1.setText(text);
-            cursor1.y = cursor.y;
-            cursor1.x = cursor.x;
+            cursor1.positionChanged += delegate { RaiseSelectionChanged(true); };
 
-            cursor2 = cursor;
+            cursor1.setText(text);
+            cursor1.y = cursor2.y;
+            cursor1.x = cursor2.x;
+
             initialized = true;
+            supressCursorEvents = false;
         }
 
         public void selectAll(Text text, TextCursor cursor)
@@ -46,6 +69,10 @@ namespace TextEditor.Logic
             cursor2.endY();
             cursor2.endX();
             initialized = true;
+
+            supressCursorEvents = true;
+            RaiseSelectionChanged(false);
+            supressCursorEvents = false;
         }
 
         public bool selectionExists()
@@ -56,6 +83,8 @@ namespace TextEditor.Logic
         public void deinitSelection()
         {
             initialized = false;
+
+            RaiseSelectionChanged(false);
         }
 
         public string getSelectedText()

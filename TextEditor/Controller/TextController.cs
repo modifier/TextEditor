@@ -16,7 +16,7 @@ namespace TextEditor.Controller
 
         private TextCursor cursor = new TextCursor();
 
-        private TextSelection selection = new TextSelection();
+        private TextSelection selection;
 
         private TextEditorRenderer renderer;
 
@@ -30,8 +30,20 @@ namespace TextEditor.Controller
         {
             this.parser = parser;
             this.renderer = renderer;
+            this.selection = new TextSelection(cursor);
+
             text = new Text(cursor);
             cursor.setText(text);
+
+            text.textChanged += delegate {
+                renderer.DisplayText(transformText(text.text));
+            };
+            cursor.positionChanged += delegate {
+                renderer.PlaceCursor(cursor.getHitPosition(), cursor.y);
+            };
+            selection.selectionChanged += delegate {
+                renderer.DisplaySelection(selection);
+            };
         }
 
         public void keyPress(Key key)
@@ -41,7 +53,7 @@ namespace TextEditor.Controller
 
             if (ShiftPressed() && isArrowKey(key) && !selection.initialized)
             {
-                selection.initSelection(text, cursor);
+                selection.initSelection(text);
             }
 
             if (isArrowKey(key))
@@ -61,17 +73,10 @@ namespace TextEditor.Controller
                     moveCaret(key);
                 }
 
-                if (selection.initialized)
+                if (selection.initialized && !ShiftPressed())
                 {
-                    if (!ShiftPressed())
-                    {
-                        selection.deinitSelection();
-                    }
-
-                    renderer.DisplayText(transformText(text.text));
+                    selection.deinitSelection();
                 }
-
-                displayCursor();
 
                 return;
             }
@@ -96,7 +101,7 @@ namespace TextEditor.Controller
                 }
                 else if (key == Key.A)
                 {
-                    selectAll();
+                    selection.selectAll(text, cursor);
                 }
 
                 return;
@@ -129,8 +134,6 @@ namespace TextEditor.Controller
             if (command != null)
             {
                 executeCommand(command);
-                renderer.DisplayText(transformText(text.text));
-                displayCursor();
             }
         }
 
@@ -234,9 +237,6 @@ namespace TextEditor.Controller
             AbstractCommand previous = executed.undo();
             executed = previous.prevLink;
             undoed = previous;
-
-            renderer.DisplayText(transformText(text.text));
-            displayCursor();
         }
 
         private void redo()
@@ -249,9 +249,6 @@ namespace TextEditor.Controller
             AbstractCommand next = undoed.execute();
             executed = next;
             undoed = next.nextLink;
-
-            renderer.DisplayText(transformText(text.text));
-            displayCursor();
         }
 
         private void moveCaret(Key key)
@@ -280,45 +277,22 @@ namespace TextEditor.Controller
             {
                 cursor.incX();
             }
-
-            displayCursor();
-        }
-
-        private void displayCursor()
-        {
-            renderer.PlaceCursor(cursor.getHitPosition(), cursor.y);
-            displaySelection();
-        }
-
-        private void displaySelection()
-        {
-            renderer.DisplaySelection(selection);
         }
 
         public void setCursorFromPoint(Point point)
-        {
-            bool selectionChanged = false;
-            
+        {            
             if (!ShiftPressed())
             {
                 selection.deinitSelection();
-                selectionChanged = true;
             }
             else if (!selection.initialized)
             {
-                selection.initSelection(text, cursor);
+                selection.initSelection(text);
             }
 
             int currentHit = renderer.getCurrentHit(point);
             
             cursor.setHitPosition(currentHit);
-
-            if (selection.initialized || selectionChanged)
-            {
-                renderer.DisplayText(transformText(text.text));
-            }
-
-            displayCursor();
         }
 
         private void copySelection()
@@ -349,17 +323,6 @@ namespace TextEditor.Controller
 
             var command = new InsertTextCommand(selection, data);
             executeCommand(command);
-
-            renderer.DisplayText(transformText(text.text));
-            displayCursor();
-        }
-
-        private void selectAll()
-        {
-            selection.selectAll(text, cursor);
-
-            renderer.DisplayText(transformText(text.text));
-            displayCursor();
         }
     }
 }

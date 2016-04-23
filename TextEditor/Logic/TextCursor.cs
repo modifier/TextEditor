@@ -14,9 +14,16 @@ namespace TextEditor.Logic
 
         private Text text = null;
 
+        public event EventHandler positionChanged;
+
         public void setText(Text text)
         {
             this.text = text;
+        }
+
+        private void RaisePositionChanged()
+        {
+            positionChanged(this, new EventArgs());
         }
 
         public int Clamp(int val, int minVal, int maxVal)
@@ -32,7 +39,14 @@ namespace TextEditor.Logic
             }
             set
             {
-                innerX = Clamp(value, 0, text.text[y].Length);
+                int newX = Clamp(value, 0, text.text[y].Length);
+
+                if (newX != innerX)
+                {
+                    innerX = newX;
+
+                    RaisePositionChanged();
+                }
             }
         }
 
@@ -44,19 +58,26 @@ namespace TextEditor.Logic
             }
             set
             {
-                innerY = Clamp(value, 0, text.text.Count - 1);
-                innerX = Clamp(innerX, 0, text.text[y].Length);
+                int newY = Clamp(value, 0, text.text.Count - 1);
+
+                if (newY != innerY)
+                {
+                    innerY = newY;
+                    innerX = Clamp(innerX, 0, text.text[y].Length);
+
+                    RaisePositionChanged();
+                }
             }
         }
 
         public void endX()
         {
-            innerX = text.text[y].Length;
+            x = text.text[y].Length;
         }
 
         public void endY()
         {
-            innerY = text.text.Count - 1;
+            y = text.text.Count - 1;
         }
 
         public void incX()
