@@ -8,6 +8,8 @@
         Title="MainWindow" Height="350" Width="525"
         MouseDown="Window_MouseDown">
     <Grid>
-        <local:TextEditorControl Focusable="True" x:Name="textEditor" Grid.Column="0" Grid.Row="0"></local:TextEditorControl>
+        <local:TextEditorControl Focusable="True" x:Name="textEditor" Grid.Column="0" Grid.Row="0" Margin="0,27,0,0"></local:TextEditorControl>
+        <Button x:Name="openGrammar" Content="Open Grammar" HorizontalAlignment="Left" VerticalAlignment="Top" Width="92"/>
+        <Button x:Name="openHighlight" Content="Open Highlight Scheme" HorizontalAlignment="Left" Margin="97,0,0,0" VerticalAlignment="Top" Width="135"/>
     </Grid>
 </Window>
