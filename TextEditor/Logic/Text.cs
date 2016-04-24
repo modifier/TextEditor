@@ -116,7 +116,7 @@ namespace TextEditor.Logic
 
         public void insertText(int cursorX, int cursorY, string selectionText)
         {
-            string[] lines = selectionText.Split('\n');
+            string[] lines = selectionText.Replace("\r", "").Split('\n');
 
             if (lines.Length == 1)
             {
