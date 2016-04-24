@@ -1,0 +1,15 @@
+!default {
+	color: #333333;
+}
+
+const {
+	color: #CC0022;
+}
+
+name {
+	color: #6633EE;
+}
+
+label {
+	color: #FFAA44;
+}

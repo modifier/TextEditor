@@ -8,10 +8,13 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Win32;
+using System.IO;
 
 namespace TextEditor
 {
@@ -71,12 +74,36 @@ braces {
 
         private void openHighlight_Click(object sender, RoutedEventArgs e)
         {
-            textEditor.SetHighlight(highlight);
+            var content = OpenFile();
+
+            if (content != null)
+            {
+                textEditor.SetHighlight(content);
+            }
         }
 
         private void openGrammar_Click(object sender, RoutedEventArgs e)
         {
-            textEditor.SetGrammar(grammar);
+            var content = OpenFile();
+
+            if (content != null)
+            {
+                textEditor.SetGrammar(content);
+            }
+        }
+
+        private string OpenFile()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+
+            bool? userClickedOk = openFileDialog.ShowDialog();
+
+            if (userClickedOk != true)
+            {
+                return null;
+            }
+
+            return File.ReadAllText(openFileDialog.FileName);
         }
     }
 }
