@@ -57,12 +57,17 @@ namespace TextEditor
 
         private void openFile_Click(object sender, RoutedEventArgs e)
         {
-            var content = OpenFile();
+            OpenFileDialog openFileDialog = new OpenFileDialog();
 
-            if (content != null)
+            bool? userClickedOk = openFileDialog.ShowDialog();
+
+            if (userClickedOk != true)
             {
-                textEditor.SetContent(content);
+                return;
             }
+
+            var content =  File.ReadAllText(openFileDialog.FileName);
+            textEditor.SetContent(content);
         }
 
         private string OpenFile()
@@ -75,7 +80,7 @@ namespace TextEditor
             {
                 return null;
             }
-
+            
             return File.ReadAllText(openFileDialog.FileName);
         }
 

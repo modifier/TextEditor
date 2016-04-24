@@ -73,6 +73,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Controller\ParserFacade.cs" />
+    <Compile Include="Controller\Settings.cs" />
     <Compile Include="Controller\TextController.cs" />
     <Compile Include="Controller\TreeFlattener.cs" />
     <Compile Include="Logic\Commands\AbstractCommand.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="Logic\Commands\InsertTextCommand.cs" />
     <Compile Include="Logic\Commands\RemoveCharCommand.cs" />
     <Compile Include="Logic\Commands\ReturnCaretCommand.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="Visual\Hightlight\HighlightImporter.cs" />
     <Compile Include="Visual\Hightlight\HightlightScheme.cs" />
     <Compile Include="Logic\TextCursor.cs" />
