@@ -9,6 +9,7 @@ using Portable.Parser.Grammar;
 using System.Linq;
 using TextEditor.Visual.Hightlight;
 using TextEditor.Logic;
+using System;
 
 namespace TextEditor.Visual
 {
@@ -21,17 +22,21 @@ namespace TextEditor.Visual
         private List<Rectangle> selectionRectangles = new List<Rectangle>();
         private Canvas surface;
         private List<TextLine> cachedLines = new List<TextLine>();
+        public event EventHandler highlightSchemeUpdated;
 
-        public TextEditorRenderer(DrawingGroup dg, Rectangle rect, Canvas surface)
+        public TextEditorRenderer(DrawingGroup dg, Rectangle rect, Canvas surface, HightlightScheme scheme)
         {
             this.dg = dg;
             this.Rectus = rect;
             this.surface = surface;
+            this.scheme = scheme;
         }
 
         public void SetHightlightScheme(HightlightScheme scheme)
         {
             this.scheme = scheme;
+
+            highlightSchemeUpdated(this, new EventArgs());
         }
 
         public void DisplayText(List<CustomTextRun> runs)

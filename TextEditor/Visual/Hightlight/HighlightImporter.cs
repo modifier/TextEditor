@@ -54,6 +54,13 @@ namespace TextEditor.Visual.Hightlight
             return scheme;
         }
 
+        public HightlightScheme GetDefaultScheme()
+        {
+            defaultConfiguration = new TextEditorConfiguration { FontFamily = "Lucida Console", FontSize = 14, TextHeight = 14, ForegroundColor = Brushes.Black };
+
+            return new HightlightScheme(defaultConfiguration);
+        }
+
         private void VisitNode(IParsingTreeNode node)
         {
             if (node is IParsingTreeTerminal && node.Rule.Name == "name" && HasParentRule("ruleName"))

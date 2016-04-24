@@ -18,6 +18,8 @@ namespace TextEditor
 
         private TextController controller;
 
+        private HighlightImporter importer;
+
         private string grammar = @"[OmitPattern(""[\s]*"")]
 [RootRule(expr)]
 SimpleArithmetics {
@@ -60,12 +62,10 @@ braces {
         {
             InitializeComponent();
 
-            renderer = new TextEditorRenderer(mainBrush, Rectus, Surface);
+            importer = new HighlightImporter();
+            renderer = new TextEditorRenderer(mainBrush, Rectus, Surface, importer.GetDefaultScheme());
 
-            HighlightImporter importer = new HighlightImporter();
-            renderer.SetHightlightScheme(importer.ImportHighlightScheme(highlight));
-
-            ParserFacade parser = new ParserFacade(grammar);
+            ParserFacade parser = new ParserFacade();
 
             controller = new TextController(renderer, parser);
         }

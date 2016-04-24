@@ -44,6 +44,14 @@ namespace TextEditor.Controller
             selection.selectionChanged += delegate {
                 renderer.DisplaySelection(selection);
             };
+            parser.grammarChanged += delegate
+            {
+                renderer.DisplayText(transformText(text.text));
+            };
+            renderer.highlightSchemeUpdated += delegate
+            {
+                renderer.DisplayText(transformText(text.text));
+            };
         }
 
         public void keyPress(Key key)

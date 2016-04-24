@@ -14,9 +14,23 @@ namespace TextEditor.Controller
     {
         private IParserFabric factory;
 
+        public event EventHandler grammarChanged;
+
         public ParserFacade(string grammar)
         {
             factory = getParserFactory(grammar);
+        }
+
+        public ParserFacade()
+        {
+
+        }
+
+        public void SetGrammar(string grammar)
+        {
+            factory = getParserFactory(grammar);
+
+            grammarChanged(this, new EventArgs());
         }
 
         private IParserFabric getParserFactory(string grammar)
@@ -41,6 +55,11 @@ namespace TextEditor.Controller
 
         public List<IParsingTreeTerminal> getTerminals(string text)
         {
+            if (factory == null)
+            {
+                return new List<IParsingTreeTerminal>();
+            }
+
             var tree = getTree(text);
 
             var flattener = new TreeFlattener(tree);
