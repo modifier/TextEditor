@@ -20,43 +20,7 @@ namespace TextEditor
 
         private HighlightImporter importer;
 
-        private string grammar = @"[OmitPattern(""[\s]*"")]
-[RootRule(expr)]
-SimpleArithmetics {
-
-    productOp: '*' | '/';
-    sumOp: '+' | '-';
-
-    [RewriteRecursion]
-    /*[ExpandRecursion]*/
-    #expr: {
-        |sum: expr sumOp expr;
-        |product: expr productOp expr;
-        |[right]power: expr '^' expr;
-        |#braces: '(' expr ')';
-        |num: ""[0-9]+"";
-    };
-}";
-
-        private string highlight = @"!default {
-	color: #000000;
-}
-
-num {
-	color: #0000ff;
-}
-
-sumOp, productOp {
-	color: #008800;
-}
-
-braces {
-	background: #00ffff;
-}
-
-/braces, braces/braces {
-	color: #888888;
-}";
+        private ParserFacade parser;
 
         public TextEditorControl()
         {
@@ -64,10 +28,24 @@ braces {
 
             importer = new HighlightImporter();
             renderer = new TextEditorRenderer(mainBrush, Rectus, Surface, importer.GetDefaultScheme());
-
-            ParserFacade parser = new ParserFacade();
+            parser = new ParserFacade();
 
             controller = new TextController(renderer, parser);
+        }
+
+        public void SetGrammar(string grammar)
+        {
+            parser.SetGrammar(grammar);
+        }
+
+        public void SetHighlight(string highlightScheme)
+        {
+            var scheme = importer.ImportHighlightScheme(highlightScheme);
+
+            if (scheme != null)
+            {
+                renderer.SetHightlightScheme(scheme);
+            }
         }
 
         private void UserControl_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

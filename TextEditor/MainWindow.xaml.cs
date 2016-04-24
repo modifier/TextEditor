@@ -20,6 +20,45 @@ namespace TextEditor
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        private string grammar = @"[OmitPattern(""[\s]*"")]
+[RootRule(expr)]
+SimpleArithmetics {
+
+    productOp: '*' | '/';
+    sumOp: '+' | '-';
+
+    [RewriteRecursion]
+    /*[ExpandRecursion]*/
+    #expr: {
+        |sum: expr sumOp expr;
+        |product: expr productOp expr;
+        |[right]power: expr '^' expr;
+        |#braces: '(' expr ')';
+        |num: ""[0-9]+"";
+    };
+}";
+
+        private string highlight = @"!default {
+	color: #000000;
+}
+
+num {
+	color: #0000ff;
+}
+
+sumOp, productOp {
+	color: #008800;
+}
+
+braces {
+	background: #00ffff;
+}
+
+/braces, braces/braces {
+	color: #888888;
+}";
+
         public MainWindow()
         {
             InitializeComponent();
@@ -28,6 +67,16 @@ namespace TextEditor
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
             textEditor.Focus();
+        }
+
+        private void openHighlight_Click(object sender, RoutedEventArgs e)
+        {
+            textEditor.SetHighlight(highlight);
+        }
+
+        private void openGrammar_Click(object sender, RoutedEventArgs e)
+        {
+            textEditor.SetGrammar(grammar);
         }
     }
 }
