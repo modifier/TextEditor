@@ -78,5 +78,19 @@ namespace TextEditor
 
             return File.ReadAllText(openFileDialog.FileName);
         }
+
+        private void saveFile_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Title = "Save File As";
+            saveFileDialog.ShowDialog();
+
+            if (saveFileDialog.FileName == "")
+            {
+                return;
+            }
+
+            File.WriteAllText(saveFileDialog.FileName, textEditor.GetContent());
+        }
     }
 }

@@ -12,6 +12,6 @@
         <Button x:Name="openGrammar" Content="Open Grammar" HorizontalAlignment="Right" VerticalAlignment="Top" Width="92" Click="openGrammar_Click" Margin="0,0,150,0" />
         <Button x:Name="openHighlight" Content="Open Highlight Scheme" HorizontalAlignment="Right" Margin="0,0,10,0" VerticalAlignment="Top" Width="135" Click="openHighlight_Click" />
         <Button x:Name="openFile" Content="Open" HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="60" Click="openFile_Click" />
-        <Button x:Name="saveFile" Content="Save" HorizontalAlignment="Left" Margin="75,0,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="saveFile" Content="Save" HorizontalAlignment="Left" Margin="75,0,0,0" VerticalAlignment="Top" Width="75" Click="saveFile_Click" />
     </Grid>
 </Window>

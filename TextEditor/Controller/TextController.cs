@@ -70,6 +70,11 @@ namespace TextEditor.Controller
             text.resetEntireText(content);
         }
 
+        public string getContent()
+        {
+            return string.Join("\n", text.text);
+        }
+
         public void keyPress(Key key)
         {
             // todo: refactoring
