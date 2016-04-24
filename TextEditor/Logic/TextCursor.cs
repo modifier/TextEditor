@@ -80,6 +80,20 @@ namespace TextEditor.Logic
             y = text.text.Count - 1;
         }
 
+        public void endText()
+        {
+            innerY = text.text.Count - 1;
+            innerX = text.text[y].Length;
+            RaisePositionChanged();
+        }
+
+        public void startText()
+        {
+            innerY = 0;
+            innerX = 0;
+            RaisePositionChanged();
+        }
+
         public void incX()
         {
             int lineLength = text.text[y].Length;

@@ -142,6 +142,14 @@ namespace TextEditor.Logic
             RaiseTextChanged();
         }
 
+        public void resetEntireText(string textToReset)
+        {
+            text = new List<string>() { "" };
+
+            cursor.startText();
+            insertText(0, 0, textToReset);
+        }
+
         public void deleteText(int cursor1X, int cursor1Y, int cursor2X, int cursor2Y)
         {
             if (cursor1Y == cursor2Y)

@@ -23,44 +23,7 @@ namespace TextEditor
     /// </summary>
     public partial class MainWindow : Window
     {
-
-        private string grammar = @"[OmitPattern(""[\s]*"")]
-[RootRule(expr)]
-SimpleArithmetics {
-
-    productOp: '*' | '/';
-    sumOp: '+' | '-';
-
-    [RewriteRecursion]
-    /*[ExpandRecursion]*/
-    #expr: {
-        |sum: expr sumOp expr;
-        |product: expr productOp expr;
-        |[right]power: expr '^' expr;
-        |#braces: '(' expr ')';
-        |num: ""[0-9]+"";
-    };
-}";
-
-        private string highlight = @"!default {
-	color: #000000;
-}
-
-num {
-	color: #0000ff;
-}
-
-sumOp, productOp {
-	color: #008800;
-}
-
-braces {
-	background: #00ffff;
-}
-
-/braces, braces/braces {
-	color: #888888;
-}";
+        private string fileContent = "(9+5) * 638 / (764 - (276 + 15))";
 
         public MainWindow()
         {
@@ -89,6 +52,16 @@ braces {
             if (content != null)
             {
                 textEditor.SetGrammar(content);
+            }
+        }
+
+        private void openFile_Click(object sender, RoutedEventArgs e)
+        {
+            var content = OpenFile();
+
+            if (content != null)
+            {
+                textEditor.SetContent(content);
             }
         }
 

@@ -52,6 +52,22 @@ namespace TextEditor.Controller
             {
                 renderer.DisplayText(transformText(text.text));
             };
+
+            RenderAll();
+        }
+
+        private void RenderAll()
+        {
+            renderer.DisplayText(transformText(text.text));
+            renderer.PlaceCursor(cursor.getHitPosition(), cursor.y);
+            renderer.DisplaySelection(selection);
+        }
+
+        public void setContent(string content)
+        {
+            selection.deinitSelection();
+
+            text.resetEntireText(content);
         }
 
         public void keyPress(Key key)
@@ -68,13 +84,11 @@ namespace TextEditor.Controller
             {
                 if (CtrlPressed() && key == Key.Home)
                 {
-                    cursor.x = 0;
-                    cursor.y = 0;
+                    cursor.startText();
                 }
                 else if (CtrlPressed() && key == Key.End)
                 {
-                    cursor.endY();
-                    cursor.endX();
+                    cursor.endText();
                 }
                 else
                 {

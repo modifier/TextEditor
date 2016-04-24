@@ -48,6 +48,11 @@ namespace TextEditor
             }
         }
 
+        public void SetContent(string content)
+        {
+            controller.setContent(content);
+        }
+
         private void UserControl_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (!IsFocused)
