@@ -26,11 +26,24 @@ namespace TextEditor.Controller
 
         }
 
-        public void SetGrammar(string grammar)
+        public void UnsetGrammar(bool redraw)
+        {
+            factory = null;
+
+            if (redraw)
+            {
+                grammarChanged(this, new EventArgs());
+            }
+        }
+
+        public void SetGrammar(string grammar, bool redraw)
         {
             factory = getParserFactory(grammar);
 
-            grammarChanged(this, new EventArgs());
+            if (redraw)
+            {
+                grammarChanged(this, new EventArgs());
+            }
         }
 
         private IParserFabric getParserFactory(string grammar)

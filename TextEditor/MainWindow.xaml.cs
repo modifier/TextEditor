@@ -37,7 +37,7 @@ namespace TextEditor
 
         private void openHighlight_Click(object sender, RoutedEventArgs e)
         {
-            var content = OpenFile();
+            var content = OpenFile("Open Highlight Scheme");
 
             if (content != null)
             {
@@ -47,7 +47,7 @@ namespace TextEditor
 
         private void openGrammar_Click(object sender, RoutedEventArgs e)
         {
-            var content = OpenFile();
+            var content = OpenFile("Open Grammar File");
 
             if (content != null)
             {
@@ -57,22 +57,18 @@ namespace TextEditor
 
         private void openFile_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-
-            bool? userClickedOk = openFileDialog.ShowDialog();
-
-            if (userClickedOk != true)
+            var content = OpenFile("Open File");
+            
+            if (content != null)
             {
-                return;
+                textEditor.OpenContent(content);
             }
-
-            var content =  File.ReadAllText(openFileDialog.FileName);
-            textEditor.SetContent(content);
         }
 
-        private string OpenFile()
+        private string OpenFile(string title)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Title = title;
 
             bool? userClickedOk = openFileDialog.ShowDialog();
 
@@ -80,22 +76,22 @@ namespace TextEditor
             {
                 return null;
             }
-            
-            return File.ReadAllText(openFileDialog.FileName);
+
+            return openFileDialog.FileName;
         }
 
         private void saveFile_Click(object sender, RoutedEventArgs e)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Title = "Save File As";
-            saveFileDialog.ShowDialog();
+            bool? userClickedOk = saveFileDialog.ShowDialog();
 
-            if (saveFileDialog.FileName == "")
+            if (userClickedOk != true)
             {
                 return;
             }
 
-            File.WriteAllText(saveFileDialog.FileName, textEditor.GetContent());
+            textEditor.SaveContent(saveFileDialog.FileName);
         }
     }
 }

@@ -53,6 +53,11 @@ namespace TextEditor.Controller
 
         private Dictionary<string, string> ConvertFromString(string data)
         {
+            if (data == "")
+            {
+                return new Dictionary<string, string>();
+            }
+
             return data.Split(';')
                     .Select(s => s.Split(','))
                     .ToDictionary(

@@ -32,11 +32,14 @@ namespace TextEditor.Visual
             this.scheme = scheme;
         }
 
-        public void SetHightlightScheme(HightlightScheme scheme)
+        public void SetHightlightScheme(HightlightScheme scheme, bool redraw)
         {
             this.scheme = scheme;
 
-            highlightSchemeUpdated(this, new EventArgs());
+            if (redraw)
+            {
+                highlightSchemeUpdated(this, new EventArgs());
+            }
         }
 
         public void DisplayText(List<CustomTextRun> runs)
