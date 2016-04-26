@@ -30,6 +30,17 @@ namespace TextEditor.Controller
             return GetData(extension, "typeHighlight");
         }
 
+        public void SetFontSize(int fontSize)
+        {
+            Properties.Settings.Default["fontSize"] = fontSize;
+            Properties.Settings.Default.Save();
+        }
+
+        public int GetFontSize()
+        {
+            return (int) Properties.Settings.Default["fontSize"];
+        }
+
         private void AddData(string extension, string path, string type)
         {
             GetData(extension, type);

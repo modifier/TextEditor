@@ -15,6 +15,8 @@ namespace TextEditor.Visual.Hightlight
 
         private HightlightScheme scheme;
 
+        private TextEditorConfiguration initialConfiguration;
+
         private TextEditorConfiguration defaultConfiguration;
 
         private TextEditorConfiguration currentConfiguration;
@@ -29,11 +31,19 @@ namespace TextEditor.Visual.Hightlight
 
         private List<string> typefaceValues = new List<string>();
 
-        public HighlightImporter()
+        public HighlightImporter(TextEditorConfiguration initialConfiguration)
         {
             string coloringGrammar = Properties.Resources.ColoringGrammar;
 
+            this.initialConfiguration = initialConfiguration;
+
             parser = new ParserFacade(coloringGrammar);
+        }
+
+        public void SetFontSize(int fontSize)
+        {
+            initialConfiguration.FontSize = fontSize;
+            initialConfiguration.TextHeight = fontSize;
         }
 
         public HightlightScheme ImportHighlightScheme(string text)
@@ -44,7 +54,7 @@ namespace TextEditor.Visual.Hightlight
             ITreeParsingResult tree = parser.getTree(text);
             VisitNode(tree.Tree);
 
-            defaultConfiguration.MergeConfiguration(new TextEditorConfiguration { FontFamily = "Lucida Console", FontSize = 14, TextHeight = 14, ForegroundColor = Brushes.Black });
+            defaultConfiguration.MergeConfiguration(initialConfiguration);
             scheme = new HightlightScheme(defaultConfiguration);
             foreach (KeyValuePair<string, TextEditorConfiguration> entry in configurations)
             {
@@ -56,9 +66,7 @@ namespace TextEditor.Visual.Hightlight
 
         public HightlightScheme GetDefaultScheme()
         {
-            defaultConfiguration = new TextEditorConfiguration { FontFamily = "Lucida Console", FontSize = 14, TextHeight = 14, ForegroundColor = Brushes.Black };
-
-            return new HightlightScheme(defaultConfiguration);
+            return new HightlightScheme(initialConfiguration);
         }
 
         private void VisitNode(IParsingTreeNode node)

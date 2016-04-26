@@ -33,6 +33,48 @@ namespace TextEditor
 
         private string _highlightPath;
 
+        private int _fontSize;
+
+        private int minFontSize = 6;
+
+        private int maxFontSize = 72;
+
+        private int fontSize
+        {
+            get
+            {
+                return _fontSize;
+            }
+
+            set
+            {
+                if (value > maxFontSize)
+                {
+                    value = maxFontSize;
+                }
+
+                if (value < minFontSize)
+                {
+                    value = minFontSize;
+                }
+
+                if (_fontSize == value)
+                {
+                    return;
+                }
+
+                _fontSize = value;
+                importer.SetFontSize(_fontSize);
+                settings.SetFontSize(_fontSize);
+
+                redraw = false;
+                UpdateHighlight();
+                redraw = true;
+
+                controller.RenderAll();
+            }
+        }
+
         private string grammarPath
         {
             get
@@ -79,7 +121,8 @@ namespace TextEditor
         {
             InitializeComponent();
 
-            importer = new HighlightImporter();
+            _fontSize = settings.GetFontSize();
+            importer = new HighlightImporter(new TextEditorConfiguration { FontFamily = "Lucida Console", FontSize = _fontSize, TextHeight = _fontSize, ForegroundColor = Brushes.Black });
             renderer = new TextEditorRenderer(mainBrush, Rectus, Surface, importer.GetDefaultScheme());
             parser = new ParserFacade();
 
@@ -199,6 +242,23 @@ namespace TextEditor
         private void ScrollViewer_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             e.Handled = true;
+
+            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+            {
+                if (e.Key == Key.OemPlus)
+                {
+                    fontSize++;
+
+                    return;
+                }
+                else if (e.Key == Key.OemMinus)
+                {
+                    fontSize--;
+
+                    return;
+                }
+            }
+
             controller.keyPress(e.Key);
         }
     }

@@ -1,5 +1,6 @@
 ﻿using Portable.Parser;
 using Portable.Parser.Grammar;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -56,7 +57,7 @@ namespace TextEditor.Controller
             RenderAll();
         }
 
-        private void RenderAll()
+        public void RenderAll()
         {
             renderer.DisplayText(transformText(text.text));
             renderer.PlaceCursor(cursor.getHitPosition(), cursor.y);
