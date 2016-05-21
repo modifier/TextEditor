@@ -1,0 +1,19 @@
+!default {
+	color: #000000;
+}
+
+string {
+	color: #008800;
+}
+
+number {
+	color: #880000;
+}
+
+array {
+	color: #333333;
+}
+
+openingBracket, closingBracket {
+	background: #99cccc;
+}

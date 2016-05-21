@@ -38,7 +38,14 @@ namespace TextEditor.Controller
 
         public void SetGrammar(string grammar, bool redraw)
         {
-            factory = getParserFactory(grammar);
+            try
+            {
+                factory = getParserFactory(grammar);
+            }
+            catch (InvalidOperationException)
+            {
+                return;
+            }
 
             if (redraw)
             {

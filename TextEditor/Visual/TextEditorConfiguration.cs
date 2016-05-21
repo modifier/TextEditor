@@ -7,7 +7,7 @@ using System.Windows.Media;
 
 namespace TextEditor.Visual
 {
-    struct TextEditorConfiguration
+    class TextEditorConfiguration
     {
         public string FontFamily;
         public int? FontSize;

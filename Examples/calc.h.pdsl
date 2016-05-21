@@ -1,18 +1,17 @@
 !default {
 	color: #000000;
-	background: #ffffff;
 }
 
 num {
-	color: #0000ff;
+	color: #880000;
 }
 
 sumOp, productOp {
-	color: #008800;
+	color: #0000ff;
 }
 
 braces {
-	background: #00ffff;
+	color: #00ff00;
 }
 
 /braces, braces/braces {

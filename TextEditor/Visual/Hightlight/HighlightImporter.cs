@@ -19,7 +19,7 @@ namespace TextEditor.Visual.Hightlight
 
         private TextEditorConfiguration defaultConfiguration;
 
-        private TextEditorConfiguration currentConfiguration;
+        private TextEditorConfiguration currentConfiguration = new TextEditorConfiguration();
 
         private List<IParsingTreeNode> nodeStack = new List<IParsingTreeNode>();
 

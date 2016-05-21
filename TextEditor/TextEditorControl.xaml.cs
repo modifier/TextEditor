@@ -174,12 +174,12 @@ namespace TextEditor
 
         public void SaveSettings()
         {
-            if (grammarPath != null)
+            if (grammarPath != null && extension != null)
             {
                 settings.SetGrammarForExtension(extension, grammarPath);
             }
 
-            if (highlightPath != null)
+            if (highlightPath != null && extension != null)
             {
                 settings.SetHighlightForExtension(extension, highlightPath);
             }

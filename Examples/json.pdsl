@@ -1,0 +1,21 @@
+[OmitPattern("[\s]*")]
+[RootRule(object)]
+JsonSchema {
+    string: "\"[^\"]*\"";
+    number: "[0-9]*(\.[0-9]+)?";
+
+    primitive: string | number;
+
+    openingBracket: '{';
+    closingBracket: '}';
+
+    [RewriteRecursion]
+    object: openingBracket objectValues closingBracket {
+        any: object | array | primitive;
+
+        objectValue: string ':' any;
+        objectValues: (objectValue (',' objectValue)*)?;
+
+        array: '[' (any (',' any)*)? ']';
+    };
+}

@@ -44,8 +44,10 @@ namespace TextEditor.Visual
                         currentRun.Text,
                         textSourceCharacterIndex - pos,
                         currentRun.Length - (textSourceCharacterIndex - pos),
-                        props);
+                        props
+                    );
                 }
+
                 pos += currentRun.Length;
             }
             
