@@ -72,7 +72,7 @@ namespace TextEditor.Logic
 
             string currentLine = text[cursorY];
 
-            if (cursorX >= currentLine.Length)
+            if (cursorX < currentLine.Length)
             {
                 return removePreviousLetter(cursorX + 1, cursorY);
             }

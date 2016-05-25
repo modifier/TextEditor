@@ -3,17 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace TextEditor.Logic.Commands
 {
-    class RemoveCharCommand : AbstractCommand
+    class DeleteCharCommand : RemoveCharCommand
     {
         private string letter;
 
         protected override void executeAtomic()
         {
-            letter = text.removePreviousLetter(cursorX, cursorY);
+            letter = text.removeNextLetter(cursorX, cursorY);
         }
 
         protected override bool stacksWith(AbstractCommand command)
@@ -25,17 +24,17 @@ namespace TextEditor.Logic.Commands
         {
             if (letter == "\n")
             {
-                text.returnCaret(text.text[cursorY - 1].Length, cursorY - 1);
+                text.returnCaret(cursorX, cursorY);
             }
             else
             {
-                text.addChar(letter, cursorX - 1, cursorY);
+                text.addChar(letter, cursorX, cursorY);
             }
         }
 
         public override bool isExecutable()
         {
-            return !(cursorX == 0 && cursorY == 0);
+            return !(cursorY == text.text.Count - 1 && cursorX == text.text[text.text.Count - 1].Length);
         }
     }
 }

@@ -148,6 +148,10 @@ namespace TextEditor.Controller
             {
                 command = new RemoveCharCommand();
             }
+            else if (key == Key.Delete && !selection.initialized)
+            {
+                command = new DeleteCharCommand();
+            }
             else if ((key == Key.Back || key == Key.Delete) && selection.initialized)
             {
                 command = new ClearSelectionCommand(selection);
