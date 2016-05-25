@@ -63,28 +63,22 @@ namespace TextEditor.Logic
             }
         }
 
-        public void removeNextLetter(int cursorX, int cursorY)
+        public string removeNextLetter(int cursorX, int cursorY)
         {
-            // todo: TBD
+            if (cursorY >= text.Count && cursorX >= text[cursorY].Length)
+            {
+                return null;
+            }
 
             string currentLine = text[cursorY];
 
-            if (cursorY == text.Count && cursorX == currentLine.Length)
+            if (cursorX >= currentLine.Length)
             {
-                return;
-            }
-
-            if (cursorX == currentLine.Length)
-            {
-                string nextLine = text[cursorY + 1];
-                text.RemoveAt(cursorY + 1);
-                text[cursorY + 1] = currentLine + nextLine;
-                RaiseTextChanged();
+                return removePreviousLetter(cursorX + 1, cursorY);
             }
             else
             {
-                text[cursorY] = currentLine.Remove(cursorX);
-                RaiseTextChanged();
+                return removePreviousLetter(0, cursorY + 1);
             }
         }
 

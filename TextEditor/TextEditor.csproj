@@ -79,6 +79,7 @@
     <Compile Include="Logic\Commands\AbstractCommand.cs" />
     <Compile Include="Logic\Commands\AddCharCommand.cs" />
     <Compile Include="Logic\Commands\ClearSelectionCommand.cs" />
+    <Compile Include="Logic\Commands\DeleteCharCommand.cs" />
     <Compile Include="Logic\Commands\InsertTextCommand.cs" />
     <Compile Include="Logic\Commands\RemoveCharCommand.cs" />
     <Compile Include="Logic\Commands\ReturnCaretCommand.cs" />

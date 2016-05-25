@@ -23,7 +23,14 @@ namespace TextEditor.Logic.Commands
 
         protected override void undoAtomic()
         {
-            text.addChar(letter, cursorX - 1, cursorY);
+            if (letter == "\n")
+            {
+                text.returnCaret(text.text[cursorY - 1].Length, cursorY - 1);
+            }
+            else
+            {
+                text.addChar(letter, cursorX - 1, cursorY);
+            }
         }
 
         public override bool isExecutable()
